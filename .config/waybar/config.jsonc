@@ -1,0 +1,181 @@
+// -*- mode: jsonc -*-
+{
+  // "layer": "top", // Waybar at top layer
+  "position": "right", // Waybar position (top|bottom|left|right)
+  // "height": 30, // Waybar height (to be removed for auto height)
+  // "width": , // Waybar width
+  "spacing": 0, // Gaps between modules (4px)
+  // "margin": "4 "
+  // Choose the order of the modules
+  "modules-left": [
+    "custom/swaync-client",
+
+    "network",
+    "bluetooth",
+    "power-profiles-daemon",
+    "custom/brightness",
+    "tray",
+  ],
+  "modules-center": [
+    "pulseaudio#microphone",
+    "pulseaudio/slider",
+    "mpris",
+    "clock",
+  ],
+  "modules-right": ["hyprland/window", "hyprland/workspaces", "custom/power"],
+  //Modules configuration
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "warp-on-scroll": false,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "0",
+    },
+  },
+  "hyprland/window": {
+    "format": "{}",
+    // "title":"",
+    "icon": true,
+    "icon-size": 24,
+    "rewrite": {
+      "(.*)": "", // Match all window titles
+    },
+  },
+  "tray": {
+    "format": "{icon}",
+    // "icon-size": 21,
+    "spacing": 10,
+    // "icons": {
+    //   "blueman": "bluetooth",
+    //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
+    // }
+  },
+  "clock": {
+    "timezone": "Asia/Kolkata",
+    "format": "{:%I\n%M}",
+    "tooltip": true,
+    "tooltip-format": "{:%A, %d %b %G}",
+  },
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "{profile}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "",
+      "performance": "",
+      "balanced": "",
+      "power-saver": "",
+    },
+  },
+  "pulseaudio": {
+    // "scroll-step": 1, // %, can be a float
+    "format": "{volume}\n{icon}",
+    "format-bluetooth": "{volume}\n{icon}",
+    "format-bluetooth-muted": "\n{icon}",
+    "format-muted": "{volume}\n",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "󰜟",
+      "headset": "󰋎",
+      "phone": "",
+      "portable": "󰓃",
+      "car": "",
+      "default": ["", "", ""],
+    },
+    "on-click-right": "pavucontrol",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+  },
+  "pulseaudio#microphone": {
+    "format": "{format_source}",
+    "format-source": "",
+    "format-source-muted": "󰍭",
+    "on-click-right": "pavucontrol",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+  },
+  "pulseaudio/slider": {
+    "min": 0,
+    "max": 100,
+    "orientation": "vertical",
+  },
+  "custom/power": {
+    "format": "⏻",
+    "on-click": "wlogout -b 5",
+    "tooltip": false,
+  },
+  "custom/menu": {
+    "format": "{icon}",
+    "format-icons": {
+      "default": "",
+      // "default": "󰣇"
+    },
+    "on-click": "rofi -show drun",
+    "tooltip": false,
+  },
+  "custom/swaync-client": {
+    "format": "",
+    "on-click": "swaync-client -t",
+    "tooltip": false,
+  },
+  "custom/brightness": {
+    "format": "",
+    "on-scroll-up": "~/.local/bin/brightness-util 0 10",
+    "on-scroll-down": "~/.local/bin/brightness-util 0 -10",
+    "tooltip": false,
+    "on-click": "pkill hyprsunset || hyprsunset",
+  },
+  "mpris": {
+    "format": "{status_icon}",
+    "format-alt": "{player_icon}",
+    "title-len": 18,
+    "format-paused": "{status_icon}",
+    "player-icons": {
+      "firefox": "󰈹",
+      "chromium": "",
+      "default": "",
+      "mpv": "",
+      "spotify": "",
+      "vlc": "󰕼",
+    },
+    "status-icons": {
+      "playing": "",
+      "paused": "",
+    },
+    "tooltip-format": "{title} | {player_icon}",
+    "on-click-right": "",
+    "on-click-middle": "",
+    // "ignored-players": ["firefox"]
+  },
+  "network": {
+    // "interface": "enp37s0",
+    "interval": 5,
+    "format": "",
+    "format-wifi": "",
+    "format-ethernet": "󰴽",
+    "format-disconnected": "", //An empty format will hide the module.
+    "tooltip-format": "{ifname} via {gwaddr} ",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
+    "tooltip-format-ethernet": "{ifname} 󰴽",
+    "tooltip-format-disconnected": "Disconnected",
+    "max-length": 50,
+    "on-click": "nm-connection-editor",
+  },
+  "bluetooth": {
+    "format": "",
+    "format-connected": "",
+    "tooltip-format": "{controller_alias}",
+    "tooltip-format-connected": "{controller_alias}\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_battery_percentage}%",
+    "on-click": "overskride",
+  },
+}
