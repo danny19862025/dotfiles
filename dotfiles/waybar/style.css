@@ -1,0 +1,225 @@
+@define-color rosewater #f5e0dc;
+@define-color flamingo #f2cdcd;
+@define-color pink #f5c2e7;
+@define-color mauve #cba6f7;
+@define-color red #f38ba8;
+@define-color maroon #eba0ac;
+@define-color peach #fab387;
+@define-color yellow #f9e2af;
+@define-color green #a6e3a1;
+@define-color teal #94e2d5;
+@define-color sky #89dceb;
+@define-color sapphire #74c7ec;
+@define-color blue #89b4fa;
+@define-color lavender #b4befe;
+@define-color text #cdd6f4;
+@define-color subtext1 #bac2de;
+@define-color subtext0 #a6adc8;
+@define-color overlay2 #9399b2;
+@define-color overlay1 #7f849c;
+@define-color overlay0 #6c7086;
+@define-color surface2 #585b70;
+@define-color surface1 #45475a;
+@define-color surface0 #313244;
+@define-color base #1e1e2e;
+@define-color mantle #181825;
+@define-color crust #11111b;
+@define-color crust-o rgba(17, 17, 27, 0.2);
+@define-color text-o rgba(205, 214, 244, 0.2);
+* {
+  border: none;
+  border-radius: 0px;
+  font-family: JetBrainsMono Nerd Font Propo;
+  font-size: 14px;
+  font-style: normal;
+  transition: all 0s;
+  min-width: 8px;
+  min-height: 0px;
+  color: @text;
+}
+
+window#waybar {
+  background: @crust-o;
+}
+
+/* COMMON */
+
+#waybar > *{
+  padding:4px 0;
+}
+
+
+#bluetooth,
+#custom-swaync-client,
+#clock,
+#network,
+#power-profiles-daemon,
+#custom-brightness,
+#tray, 
+#pulseaudio,
+#mpris,
+#pulseaudio-slider,
+#workspaces,
+#window,
+#custom-power{
+  font-weight: 500;
+  margin: 10px 0;
+}
+
+
+/* window - icon */
+#window{
+  margin-right: -12px;
+  margin-left: 11px;
+}
+
+
+#pulseaudio-slider {
+    padding: 0;
+    margin: 10px 0 10px 0;
+}
+#pulseaudio-slider slider {
+    opacity: 1;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+    background-color: @text;
+    border-radius:50%;
+}
+#pulseaudio-slider trough {
+    min-height: 80px;
+    min-width: 10px;
+    border-radius: 10px;
+    background: @text-o;
+}
+#pulseaudio-slider highlight {
+    min-width: 10px;
+    border-radius: 5px;
+    background: @mauve;
+}
+
+
+#custom-swaync-client:hover{
+    color: @peach;
+}
+
+
+
+#network:hover{
+  color: @green;
+}
+#network.disabled:hover{
+  color: @subtext0;
+}
+#network.disconnected:hover{
+  color: @red;
+}
+
+
+
+
+#power-profiles-daemon.performance:hover{
+  color: @red;
+}
+#power-profiles-daemon.balanced:hover{
+  color: @sapphire;
+}
+#power-profiles-daemon.power-saver:hover{
+  color: @green;
+}
+
+
+
+#custom-brightness:hover{
+  color: @yellow;
+}
+
+#pulseaudio:hover{
+  color: @mauve;
+}
+#mpris:hover{
+  color: @mauve;
+}
+
+
+#clock{
+  font-size: 18px;
+  font-weight: 900;
+  color: @text;
+  background-color: @crust-o;
+  padding: 2px 4px;
+  margin:0 4px;
+  border-radius: 10px
+}
+#clock:hover{
+  color: @mauve;
+}
+#custom-power:hover{
+  color: @red;
+}
+
+#workspaces{
+  color: @text;
+  background-color: @crust-o;
+  padding: 4px;
+  margin:0 4px;
+  border-radius: 10px
+}
+
+
+#workspaces button{
+  border-radius: 10px;
+  margin-bottom: 4px;
+  /* background-color: red; */
+  font-weight: 900;
+}
+#workspaces button:last-child{
+  margin-bottom: 0;
+}
+
+#workspaces button:hover label{
+  color: @mauve;
+}
+
+#workspaces button.active label{
+  color:@mauve;
+}
+#workspaces button.active{
+  background-color: @text-o;
+}
+
+#bluetooth:hover{
+  color: @sapphire;
+}
+
+/* tooltips */
+
+tooltip {
+  background-color: @crust-o;
+  color: transparent;
+  border-radius:10px;
+  border: 2px solid @mauve;
+  padding:2px;
+}
+
+tooltip label {
+  background-color: transparent;
+  color: @text;
+  font-size: 13px;
+}
+
+tooltip >* {
+  border-radius: 10px;
+}
+
+/* tray */
+
+#tray {
+  background-color: @crust-o;
+  padding: 4px;
+  margin: 4px;
+  border-radius: 10px
+}
+#tray>*>*{
+  margin: 4px 0;
+}
