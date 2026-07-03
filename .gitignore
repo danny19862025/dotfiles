@@ -1,0 +1,9 @@
+.ssh/
+.gnupg/
+.bash_history
+.claude.json
+.claude/
+.config/rclone/
+.zsh_history
+*.backup
+*.swp
