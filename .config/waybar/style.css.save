@@ -1,0 +1,68 @@
+/* Clean Reset */
+* {
+    font-family: "JetBrainsMono Nerd Font", "Font Awesome 6 Free", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+}
+
+/* The Main Bar - Floating & Glassy */
+window#waybar {
+    background-color: rgba(30, 30, 46, 0.4); /* Very transparent dark base */
+    color: #cdd6f4;
+    transition-property: background-color;
+    transition-duration: .5s;
+    border-radius: 12px;
+    margin: 8px 12px 0px 12px; /* Pulls it away from screen edges */
+}
+
+/* Individual Module Styling */
+#workspaces,
+#clock,
+#battery,
+#pulseaudio,
+#network,
+#cpu,
+#memory,
+#tray {
+    background-color: rgba(255, 255, 255, 0.1); /* Frosted module backgrounds */
+    padding: 2px 12px;
+    margin: 4px 4px;
+    border-radius: 8px;
+}
+
+/* Active Workspaces (The desktop you are currently on) */
+#workspaces button.active {
+    background-color: rgba(245, 194, 231, 0.6); /* Soft pink accent to match cherry blossoms */
+    color: #11111b;
+    border-radius: 6px;
+}
+
+#workspaces button {
+    color: #cdd6f4;
+    padding: 0 4px;
+}
+
+/* Hover effect on workspaces */
+#workspaces button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+}
+
+/* Clock & Date alignment */
+#clock {
+    color: #f5c2e7; /* Matching pink text */
+}
+
+/* Battery Warning colors */
+#battery.critical:not(.charging) {
+    background-color: #f38ba8;
+    color: #11111b;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
