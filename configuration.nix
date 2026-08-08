@@ -183,27 +183,10 @@ systemd.user.timers."rclone-sync" = {
 
 
 
-systemd.user.services.gdrive-personal-sync = {
-    description = "NixOS BackUP";
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    
-    serviceConfig = {
-      Type = "oneshot";
-      # Changed 'gdrive_personal' to 'NixosBackup' to match your rclone setup!
-      # We are saving it into a folder also named 'NixosBackup' on that drive.
-      ExecStart = "${pkgs.rclone}/bin/rclone copy /home/danny/Documents NixosBackup:NixosBackup --verbose";
-    };
-  };
+# NOTE: an hourly "gdrive-personal-sync" unit pair used to live here. It ran the
+# exact same rclone copy as "rclone-sync" above, which fires every 5 minutes, so
+# it was pure duplication and has been removed.
 
-  systemd.user.timers.gdrive-personal-sync = {
-    description = "Trigger Private Google Drive Sync every hour";
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnBootSec = "10m";       
-      OnUnitActiveSec = "1h";  
-    };
-  };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

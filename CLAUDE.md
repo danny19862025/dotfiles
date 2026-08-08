@@ -109,13 +109,20 @@ behaviour on a live machine.
   Its `hardware-configuration.nix` and `packages/` are identical to the root copies.
   Nothing imports it. Treat the **repo root** as the desktop config; only touch `nixos/`
   if explicitly asked.
-- **`home-manager` is used but never declared in `flake.nix` `inputs`.** It is destructured
-  in `outputs` only, so Nix resolves it as an *indirect* registry flakeref. Consequence,
-  visible in `flake.lock`: home-manager pulls **its own `nixpkgs-unstable`**, while the
-  system uses `nixos-26.05` (`nixpkgs_2`). Only `zen-browser` actually has
-  `inputs.nixpkgs.follows = "nixpkgs"`. `CHEATSHEET.md` claims both inputs follow nixpkgs
-  — that claim is out of date. Declaring home-manager explicitly with a `follows` is the
-  correct fix, but it is a behaviour change that needs a rebuild to validate.
+- **`flake.lock` is stale on purpose after the home-manager fix.** `home-manager` is now a
+  declared input (`release-26.05`, with `inputs.nixpkgs.follows = "nixpkgs"`), but the
+  committed lock still carries the old *indirect* registry node that pulled its own
+  `nixpkgs-unstable`. Nix rewrites the lock automatically on the next rebuild because the
+  input declaration changed — **the first rebuild after this change will produce a
+  `flake.lock` diff, and that is expected**. Commit the regenerated lock.
+- **`networking.wireless.enable` and `networking.networkmanager.enable` are both `true`**
+  in `configuration.nix` (lines 26–27). That runs standalone `wpa_supplicant` alongside
+  NetworkManager, which also uses wpa_supplicant as its own backend — the two can fight
+  over the wireless interface. NetworkManager is the one actually in charge here (GNOME's
+  WiFi panel and `wg0` both depend on it), so `networking.wireless.enable` is very likely
+  the line to drop. **Left as-is deliberately**: it can't be validated without the real
+  radio, and getting it wrong means no WiFi on a laptop. Confirm with the user before
+  changing it.
 - **`packages/snd-hda-cs8409.nix` is dead config.** It builds the Cirrus CS8409 codec
   driver (2016/2017 MacBook Pro speakers) from `davidjo/snd_hda_macbookpro` at a pinned
   rev, but no `boot.extraModulePackages` anywhere references it. The upstream driver
@@ -125,9 +132,10 @@ behaviour on a live machine.
 - **Both GNOME and Hyprland are enabled** in `configuration.nix`. GNOME is the day-to-day
   session; the Hyprland/Waybar configs exist and are deployed but aren't the primary
   desktop. NetworkManager cannot be removed — GNOME's WiFi panel depends on it.
-- **Two overlapping rclone backup units** in `configuration.nix`: `rclone-sync`
-  (every 5 min) and `gdrive-personal-sync` (hourly). Both run the identical
-  `rclone copy /home/danny/Documents NixosBackup:NixosBackup`. Redundant, but live.
+- **One rclone backup unit**, `rclone-sync`, firing every 5 minutes via
+  `OnCalendar = "*:0/5"`. An hourly `gdrive-personal-sync` pair running the byte-identical
+  `rclone copy` was removed; a comment marks where it was. The remote (`NixosBackup:`) is
+  configured in `~/.config/rclone/`, which is gitignored.
 - **git identity differs by source**: `home.nix` sets `danny.rudd@icloud.com`; commits in
   this repo may use a different address. Match whatever the repo's recent history uses.
 - **Formatting in the `.nix` files is inconsistent** (mixed tabs and spaces, irregular

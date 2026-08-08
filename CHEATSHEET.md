@@ -40,8 +40,10 @@ sudo nix flake lock --update-input <name>   # bump just one, e.g. zen-browser
 ## Health checks
 
 ```bash
-# Confirm a flake input's "follows" actually worked (shared nixpkgs, no duplication)
-cat /etc/nixos/flake.lock | grep -A15 '"nixpkgs_2":'
+# Confirm the "follows" actually worked: there should be exactly ONE nixpkgs
+# node in the lock. A "nixpkgs_2" means something dragged in a second copy.
+grep -c '"nixpkgs' /etc/nixos/flake.lock
+grep '"nixpkgs_2"' /etc/nixos/flake.lock    # expect: no output
 
 # home-manager status/logs
 systemctl status home-manager-danny.service
@@ -111,7 +113,9 @@ a full `nixos-rebuild switch`.
 
 - Two flake inputs beyond nixpkgs: `zen-browser` and `home-manager`,
   both use `inputs.nixpkgs.follows = "nixpkgs"` to avoid duplicate
-  nixpkgs downloads/builds.
+  nixpkgs downloads/builds. `home-manager` is pinned to
+  `release-26.05` so it matches the `nixos-26.05` nixpkgs pin — bump
+  both together when you move to a new NixOS release.
 - `home-manager.backupFileExtension = "backup"` is set in `flake.nix` —
   if home-manager ever finds a pre-existing file in its way, it renames
   it to `filename.backup` instead of failing. Check for `.backup` files
