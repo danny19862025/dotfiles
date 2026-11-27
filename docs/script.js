@@ -1,4 +1,4 @@
-/* Orbit-Inspired Interactions, Typewriter Engine & Live Config Explorer (No Countdown) */
+/* Cosmic Showcase Interactions, Slide-In Animations & Live Config Explorer (No Countdown / No Typing) */
 
 (() => {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -18,150 +18,46 @@
   window.addEventListener('resize', updateScrollProgress, { passive: true });
 
   /* -----------------------------------------------------------
-   * 2. Zero-Shift Typewriter Helper (matches OrbitTypewriter)
+   * 2. Immediate Staggered Slide-From-Right Hero Entrance
    * ----------------------------------------------------------- */
-  function escapeHtml(str) {
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-  }
+  const heroSteps = Array.from(document.querySelectorAll('[data-hero-step]')).sort(
+    (a, b) => Number(a.dataset.heroStep) - Number(b.dataset.heroStep)
+  );
 
-  function renderHighlightedText(visible, fullText, highlight) {
-    if (!highlight) return escapeHtml(visible);
-    const idx = fullText.indexOf(highlight);
-    if (idx === -1 || visible.length <= idx) return escapeHtml(visible);
-    const before = visible.slice(0, idx);
-    const rest = visible.slice(idx);
-    const hi = rest.slice(0, highlight.length);
-    const after = rest.slice(highlight.length);
-    return `${escapeHtml(before)}<span class="gradient-hero">${escapeHtml(hi)}</span>${escapeHtml(after)}`;
-  }
-
-  function runTypewriter(el, onComplete) {
-    if (!el) {
-      onComplete?.();
-      return;
-    }
-    const text = el.dataset.typewriter || '';
-    const highlight = el.dataset.highlight || '';
-    const speed = Number(el.dataset.speed || 26);
-    const caretSm = el.dataset.caretSm === 'true';
-    const keepCaret = el.dataset.keepCaret === 'true';
-    const liveEl = el.querySelector('.orbit-type-live');
-    if (!liveEl) {
-      onComplete?.();
-      return;
-    }
-
-    const caretHtml = `<span class="orbit-caret${caretSm ? ' orbit-caret-sm' : ''}" aria-hidden="true"></span>`;
-
-    if (prefersReducedMotion) {
-      liveEl.innerHTML = renderHighlightedText(text, text, highlight) + (keepCaret ? caretHtml : '');
-      onComplete?.();
-      return;
-    }
-
-    let i = 0;
-    function step() {
-      i += 1;
-      const visible = text.slice(0, i);
-      const isDone = i >= text.length;
-      liveEl.innerHTML =
-        renderHighlightedText(visible, text, highlight) +
-        (!isDone || keepCaret ? caretHtml : '');
-
-      if (isDone) {
-        onComplete?.();
-      } else {
-        setTimeout(step, speed);
-      }
-    }
-    step();
-  }
-
-  /* -----------------------------------------------------------
-   * 3. Immediate Hero Cascade (No Countdown Overlay)
-   * ----------------------------------------------------------- */
-  const heroH1 = document.getElementById('hero-h1-type');
-  const heroDesc = document.getElementById('hero-desc-type');
-  const rebuildHeading = document.getElementById('rebuild-heading-type');
-  const rebuildCmd = document.getElementById('rebuild-cmd-nixos');
-  const heroStep1 = document.querySelector('[data-hero-step="1"]');
-  const heroStep2 = document.querySelector('[data-hero-step="2"]');
-  const heroStep3 = document.querySelector('[data-hero-step="3"]');
-
-  let heroControlsRevealed = false;
-  function revealHeroControls() {
-    if (heroControlsRevealed) return;
-    heroControlsRevealed = true;
-    heroStep1?.classList.add('is-shown');
-    setTimeout(() => heroStep2?.classList.add('is-shown'), 90);
-    setTimeout(() => {
-      heroStep3?.classList.add('is-shown');
-      runTypewriter(rebuildHeading, () => {
-        runTypewriter(rebuildCmd);
+  if (prefersReducedMotion) {
+    heroSteps.forEach((el) => el.classList.add('is-shown'));
+  } else {
+    requestAnimationFrame(() => {
+      heroSteps.forEach((el, idx) => {
+        setTimeout(() => {
+          el.classList.add('is-shown');
+        }, 60 + idx * 85);
       });
-    }, 180);
-  }
-
-  // Start typing hero immediately on page load!
-  runTypewriter(heroH1, () => {
-    runTypewriter(heroDesc, () => {
-      revealHeroControls();
     });
-  });
-
-  // Safety fallback if background tab throttles timers
-  setTimeout(revealHeroControls, 3400);
+  }
 
   /* -----------------------------------------------------------
-   * 4. Scroll-Triggered Typewriter Headings & Slide-From-Right
+   * 3. Scroll-Triggered Slide-From-Right Reveals
    * ----------------------------------------------------------- */
-  const scrollHeadings = document.querySelectorAll('[data-scroll-heading]');
-  const headingObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const header = entry.target;
-        headingObserver.unobserve(header);
-
-        header.querySelectorAll('.pop-item').forEach((el) => el.classList.add('in-view'));
-
-        const titleEl = header.querySelector('[data-scroll-type]');
-        const typeWrap = titleEl?.querySelector('.orbit-type-wrap');
-        if (typeWrap && titleEl) {
-          typeWrap.dataset.typewriter = titleEl.dataset.scrollType || '';
-          typeWrap.dataset.speed = '24';
-          runTypewriter(typeWrap, () => {
-            header.querySelectorAll('.slide-after-type').forEach((el, idx) => {
-              setTimeout(() => el.classList.add('in-view'), idx * 80);
-            });
-          });
-        } else {
-          header.querySelectorAll('.slide-after-type').forEach((el) => el.classList.add('in-view'));
-        }
-      });
-    },
-    { threshold: 0.2 }
-  );
-  scrollHeadings.forEach((h) => headingObserver.observe(h));
-
   const slideItems = document.querySelectorAll('.slide-from-right');
-  const slideObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('in-view');
-        slideObserver.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.12 }
-  );
-  slideItems.forEach((el) => slideObserver.observe(el));
+  if (prefersReducedMotion) {
+    slideItems.forEach((el) => el.classList.add('in-view'));
+  } else {
+    const slideObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('in-view');
+          slideObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12 }
+    );
+    slideItems.forEach((el) => slideObserver.observe(el));
+  }
 
   /* -----------------------------------------------------------
-   * 5. Hero Quick-Rebuild Target Switcher
+   * 4. Hero Quick-Rebuild Target Switcher
    * ----------------------------------------------------------- */
   const miniToggleBtns = document.querySelectorAll('[data-quick-host]');
   const quickPanels = document.querySelectorAll('[data-quick-panel]');
@@ -180,8 +76,15 @@
   });
 
   /* -----------------------------------------------------------
-   * 6. Interactive Config Explorer & Live Theme Switcher
+   * 5. Interactive Config Explorer & Live Theme Switcher
    * ----------------------------------------------------------- */
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
   const THEMES = [
     {
       id: 'tokyonight',
@@ -205,7 +108,7 @@
     },
     {
       id: 'orbit',
-      name: 'Orbit Midnight',
+      name: 'Cosmic Violet',
       swatch: ['#0b0d17', '#a78bfa'],
       vars: {
         bg: '#0b0d17',
@@ -610,7 +513,7 @@ bind = , Print, exec, grim -g "$(slurp)" ~/Pictures/screenshot.png`,
           <span class="seg seg-git">  master </span>
           <span class="seg seg-time">  26.05 </span>
         </div>
-        <div class="prompt-cmd"><span class="prompt-arrow">❯</span>fastfetch<span class="orbit-caret orbit-caret-sm" aria-hidden="true"></span></div>
+        <div class="prompt-cmd"><span class="prompt-arrow">❯</span>fastfetch</div>
         <div class="fetch-grid">
           <pre class="nix-ascii" aria-hidden="true">   ▗▄▄▖ ▗▄▄▖
   ▗▘  ▝▙▘  ▝▖
@@ -687,7 +590,7 @@ bind = , Print, exec, grim -g "$(slurp)" ~/Pictures/screenshot.png`,
   selectSimFile('ghostty');
 
   /* -----------------------------------------------------------
-   * 7. Stack Bento Category Filter
+   * 6. Stack Bento Category Filter
    * ----------------------------------------------------------- */
   const stackFilterBtns = document.querySelectorAll('[data-stack-filter]');
   const stackCards = document.querySelectorAll('[data-stack-cat]');
@@ -705,7 +608,7 @@ bind = , Print, exec, grim -g "$(slurp)" ~/Pictures/screenshot.png`,
   });
 
   /* -----------------------------------------------------------
-   * 8. Managed Hosts Switcher
+   * 7. Managed Hosts Switcher
    * ----------------------------------------------------------- */
   const hostBtns = document.querySelectorAll('[data-host]');
   const hostPanels = document.querySelectorAll('[data-host-panel]');
@@ -724,7 +627,7 @@ bind = , Print, exec, grim -g "$(slurp)" ~/Pictures/screenshot.png`,
   });
 
   /* -----------------------------------------------------------
-   * 9. Cheatsheet Category Filter + Live Search
+   * 8. Cheatsheet Category Filter + Live Search
    * ----------------------------------------------------------- */
   const cheatFilterBtns = document.querySelectorAll('[data-cheat-filter]');
   const cheatSearchInput = document.getElementById('cheat-search');
@@ -750,7 +653,7 @@ bind = , Print, exec, grim -g "$(slurp)" ~/Pictures/screenshot.png`,
   cheatSearchInput?.addEventListener('input', applyCheatFilter);
 
   /* -----------------------------------------------------------
-   * 10. Universal Copy Buttons
+   * 9. Universal Copy Buttons
    * ----------------------------------------------------------- */
   document.querySelectorAll('[data-copy]').forEach((btn) => {
     btn.addEventListener('click', async () => {

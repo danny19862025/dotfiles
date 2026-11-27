@@ -8,7 +8,7 @@
     name="description"
     content="Declarative NixOS 26.05 Flakes, Home Manager, Hyprland + GNOME desktop dotfiles, custom MacBook CS8409 audio driver, automated rclone backups, and k3s homelab configuration."
   />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='256' y2='256' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0%25' stop-color='%23a78bfa'/%3E%3Cstop offset='100%25' stop-color='%2338bdf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='8' y='8' width='240' height='240' rx='60' fill='url(%23g)'/%3E%3Ccircle cx='128' cy='128' r='52' fill='%230b0d17'/%3E%3Cellipse cx='128' cy='128' rx='98' ry='36' fill='none' stroke='white' stroke-width='16' transform='rotate(-24 128 128)'/%3E%3Ccircle cx='66' cy='150' r='20' fill='%23fbbf24' stroke='%230f172a' stroke-width='7'/%3E%3C/svg%3E" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='0' y1='0' x2='256' y2='256' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0%25' stop-color='%23a78bfa'/%3E%3Cstop offset='100%25' stop-color='%2338bdf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='10' width='236' height='236' rx='58' fill='%230b0d17' stroke='url(%23b)' stroke-width='12'/%3E%3Cg stroke-width='14' stroke-linecap='round' stroke-linejoin='round' fill='none'%3E%3Cpath d='M112 100 H184 M156 100 L170 76' stroke='%2338bdf8'/%3E%3Cpath d='M112 100 H184 M156 100 L170 76' stroke='%23a78bfa' transform='rotate(60 128 128)'/%3E%3Cpath d='M112 100 H184 M156 100 L170 76' stroke='%2338bdf8' transform='rotate(120 128 128)'/%3E%3Cpath d='M112 100 H184 M156 100 L170 76' stroke='%23a78bfa' transform='rotate(180 128 128)'/%3E%3Cpath d='M112 100 H184 M156 100 L170 76' stroke='%2338bdf8' transform='rotate(240 128 128)'/%3E%3Cpath d='M112 100 H184 M156 100 L170 76' stroke='%23a78bfa' transform='rotate(300 128 128)'/%3E%3C/g%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -25,22 +25,20 @@
         <a href="#top" class="brand-link">
           <svg class="brand-emblem" width="30" height="30" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
-              <linearGradient id="navTile" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+              <linearGradient id="navStroke" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stop-color="#a78bfa" />
                 <stop offset="100%" stop-color="#38bdf8" />
               </linearGradient>
-              <radialGradient id="navCore" cx="35%" cy="30%" r="70%">
-                <stop offset="0%" stop-color="#313244" />
-                <stop offset="100%" stop-color="#0b0d17" />
-              </radialGradient>
             </defs>
-            <rect x="8" y="8" width="240" height="240" rx="60" fill="url(#navTile)" />
-            <rect x="8" y="8" width="240" height="118" rx="60" fill="white" fill-opacity="0.18" />
-            <path d="M 28 128 A 100 38 0 0 1 228 128" stroke="white" stroke-opacity="0.92" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
-            <circle cx="128" cy="128" r="46" fill="url(#navCore)" />
-            <path d="M 128 98 L 154 113 L 154 143 L 128 158 L 102 143 L 102 113 Z" stroke="#38bdf8" stroke-width="8" stroke-linejoin="round" fill="none" />
-            <path d="M 228 128 A 100 38 0 0 1 28 128" stroke="white" stroke-opacity="0.95" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
-            <circle cx="62" cy="152" r="20" fill="#fbbf24" stroke="#0f172a" stroke-width="7" />
+            <rect x="10" y="10" width="236" height="236" rx="58" fill="#0b0d17" stroke="url(#navStroke)" stroke-width="12" />
+            <g stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#38bdf8" />
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#a78bfa" transform="rotate(60 128 128)" />
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#38bdf8" transform="rotate(120 128 128)" />
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#a78bfa" transform="rotate(180 128 128)" />
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#38bdf8" transform="rotate(240 128 128)" />
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#a78bfa" transform="rotate(300 128 128)" />
+            </g>
           </svg>
           <span class="brand-name">danny/dotfiles</span>
           <span class="brand-chip">
@@ -68,73 +66,58 @@
     </header>
 
     <main id="top">
-      <!-- Hero Section (Immediate Orbit Pop-In + Typewriter, No Countdown) -->
+      <!-- Hero Section (Immediate Slide-From-Right Reveals, NixOS Emblem, No Countdown or Typing) -->
       <section class="hero-section">
         <div class="hero-aura" aria-hidden="true"></div>
 
         <div class="container-6xl hero-center">
-          <!-- Animated Emblem -->
-          <div class="hero-emblem-wrap pop-on-load">
+          <!-- NixOS Flake Emblem -->
+          <div class="hero-emblem-wrap hero-reveal-right" data-hero-step="0">
             <div class="hero-emblem-frame">
               <div class="orbit-pop-halo" aria-hidden="true"></div>
-              <svg width="74" height="74" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <svg class="nix-emblem-svg" width="74" height="74" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <defs>
-                  <linearGradient id="heroTile" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="heroStroke" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
                     <stop offset="0%" stop-color="#a78bfa" />
-                    <stop offset="100%" stop-color="#38bdf8" />
+                    <stop offset="55%" stop-color="#38bdf8" />
+                    <stop offset="100%" stop-color="#fbbf24" />
                   </linearGradient>
-                  <radialGradient id="heroCore" cx="35%" cy="30%" r="70%">
-                    <stop offset="0%" stop-color="#313244" />
+                  <radialGradient id="heroBg" cx="35%" cy="25%" r="80%">
+                    <stop offset="0%" stop-color="#1e1b4b" />
                     <stop offset="100%" stop-color="#0b0d17" />
                   </radialGradient>
                 </defs>
-                <rect x="8" y="8" width="240" height="240" rx="60" fill="url(#heroTile)" />
-                <rect x="8" y="8" width="240" height="118" rx="60" fill="white" fill-opacity="0.18" />
-                <path d="M 28 128 A 100 38 0 0 1 228 128" stroke="white" stroke-opacity="0.92" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
-                <circle cx="128" cy="128" r="46" fill="url(#heroCore)" />
-                <path d="M 128 96 L 156 112 L 156 144 L 128 160 L 100 144 L 100 112 Z" stroke="#38bdf8" stroke-width="8" stroke-linejoin="round" fill="none" />
-                <path d="M 228 128 A 100 38 0 0 1 28 128" stroke="white" stroke-opacity="0.95" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
-                <circle class="orbiting-moon" cx="62" cy="152" r="22" fill="#fbbf24" stroke="#0f172a" stroke-width="8" />
+                <rect x="8" y="8" width="240" height="240" rx="60" fill="url(#heroBg)" stroke="url(#heroStroke)" stroke-width="10" />
+                <g stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M112 100 H184 M156 100 L170 76" stroke="#38bdf8" />
+                  <path d="M112 100 H184 M156 100 L170 76" stroke="#a78bfa" transform="rotate(60 128 128)" />
+                  <path d="M112 100 H184 M156 100 L170 76" stroke="#38bdf8" transform="rotate(120 128 128)" />
+                  <path d="M112 100 H184 M156 100 L170 76" stroke="#a78bfa" transform="rotate(180 128 128)" />
+                  <path d="M112 100 H184 M156 100 L170 76" stroke="#38bdf8" transform="rotate(240 128 128)" />
+                  <path d="M112 100 H184 M156 100 L170 76" stroke="#a78bfa" transform="rotate(300 128 128)" />
+                </g>
               </svg>
             </div>
           </div>
 
           <!-- Status Badge -->
-          <div class="hero-eyebrow pop-on-load delay-1">
+          <div class="hero-eyebrow hero-reveal-right" data-hero-step="1">
             <svg class="icon-xs text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             <span>Declarative Flakes · NixOS 26.05 · Hyprland + GNOME · k3s Homelab</span>
           </div>
 
-          <!-- Zero-shift Typewriter Headline -->
-          <h1 class="hero-h1">
-            <span
-              class="orbit-type-wrap"
-              id="hero-h1-type"
-              data-typewriter="Declarative Linux, from Desktop to Homelab."
-              data-highlight="from Desktop to Homelab"
-              data-speed="24"
-            >
-              <span class="orbit-type-ghost" aria-hidden="true">Declarative Linux, <span class="gradient-hero">from Desktop to Homelab</span>.</span>
-              <span class="orbit-type-live"></span>
-            </span>
+          <!-- Slide-In Headline -->
+          <h1 class="hero-h1 hero-reveal-right" data-hero-step="2">
+            Declarative Linux, <span class="gradient-hero">from Desktop to Homelab</span>.
           </h1>
 
-          <!-- Zero-shift Typewriter Lead -->
-          <p class="hero-lead">
-            <span
-              class="orbit-type-wrap"
-              id="hero-desc-type"
-              data-typewriter="Danny's personal NixOS Flakes repository — managing a TokyoNight-themed daily driver workstation, Hyprland & Waybar dotfiles, custom MacBook Pro audio drivers, automated rclone backups, and a k3s worker node."
-              data-speed="8"
-              data-caret-sm="true"
-            >
-              <span class="orbit-type-ghost" aria-hidden="true">Danny's personal NixOS Flakes repository — managing a TokyoNight-themed daily driver workstation, Hyprland &amp; Waybar dotfiles, custom MacBook Pro audio drivers, automated rclone backups, and a k3s worker node.</span>
-              <span class="orbit-type-live"></span>
-            </span>
+          <!-- Slide-In Lead -->
+          <p class="hero-lead hero-reveal-right" data-hero-step="3">
+            Danny's personal NixOS Flakes repository — managing a TokyoNight-themed daily driver workstation, Hyprland &amp; Waybar dotfiles, custom MacBook Pro audio drivers, automated rclone backups, and a k3s worker node.
           </p>
 
           <!-- Primary CTA Buttons -->
-          <div class="hero-cta-row hero-reveal-step" data-hero-step="1">
+          <div class="hero-cta-row hero-reveal-right" data-hero-step="4">
             <a href="https://github.com/danny19862025/dotfiles" target="_blank" rel="noopener noreferrer" class="btn-primary-orbit">
               <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
               <span>Explore on GitHub</span>
@@ -146,7 +129,7 @@
           </div>
 
           <!-- Platform / Stack Pills -->
-          <div class="hero-pills-row hero-reveal-right" data-hero-step="2">
+          <div class="hero-pills-row hero-reveal-right" data-hero-step="5">
             <span class="space-glass meta-pill">
               <svg class="icon-xs text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
               NixOS 26.05 · Home Manager
@@ -165,22 +148,11 @@
             </span>
           </div>
 
-          <!-- Orbit-style Featured Quick-Rebuild Card -->
-          <div id="how-to-rebuild" class="space-glass-strong orbit-slide-highlight quickstart-card hero-reveal-right" data-hero-step="3">
+          <!-- Featured Quick-Rebuild Card -->
+          <div id="how-to-rebuild" class="space-glass-strong orbit-slide-highlight quickstart-card hero-reveal-right" data-hero-step="6">
             <div class="quickstart-head">
               <div>
-                <h2 class="quickstart-title">
-                  <span
-                    class="orbit-type-wrap-inline"
-                    id="rebuild-heading-type"
-                    data-typewriter="How to Rebuild & Switch"
-                    data-speed="28"
-                    data-caret-sm="true"
-                  >
-                    <span class="orbit-type-ghost" aria-hidden="true">How to Rebuild &amp; Switch</span>
-                    <span class="orbit-type-live"></span>
-                  </span>
-                </h2>
+                <h2 class="quickstart-title">How to Rebuild &amp; Switch</h2>
                 <p class="quickstart-sub">One flake command applies system packages, services, Home Manager, and all symlinked dotfiles together.</p>
               </div>
               <div class="host-mini-toggle" role="tablist" aria-label="Quick rebuild target">
@@ -219,7 +191,7 @@
                     <span>Copy</span>
                   </button>
                 </div>
-                <pre class="cmd-pre"><code id="rebuild-cmd-nixos" class="orbit-type-wrap-inline" data-typewriter="cd /etc/nixos && sudo nixos-rebuild switch --flake .#nixos" data-speed="14" data-caret-sm="true" data-keep-caret="true"><span class="orbit-type-ghost" aria-hidden="true">cd /etc/nixos &amp;&amp; sudo nixos-rebuild switch --flake .#nixos</span><span class="orbit-type-live"></span></code></pre>
+                <pre class="cmd-pre"><code>cd /etc/nixos &amp;&amp; sudo nixos-rebuild switch --flake .#nixos</code></pre>
               </div>
             </div>
 
@@ -247,28 +219,23 @@
                     <span>Copy</span>
                   </button>
                 </div>
-                <pre class="cmd-pre"><code>cd /etc/nixos &amp;&amp; sudo nixos-rebuild switch --flake ./asus-worker#asus-worker<span class="orbit-caret orbit-caret-sm" aria-hidden="true"></span></code></pre>
+                <pre class="cmd-pre"><code>cd /etc/nixos &amp;&amp; sudo nixos-rebuild switch --flake ./asus-worker#asus-worker</code></pre>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Interactive Config & Ghostty Terminal Explorer (Orbit Simulator Aesthetic) -->
+      <!-- Interactive Config & Ghostty Terminal Explorer -->
       <section id="explorer" class="section-block">
         <div class="container-6xl">
-          <div class="section-header" data-scroll-heading>
-            <div class="section-badge badge-sky pop-item">
+          <div class="section-header">
+            <div class="section-badge badge-sky slide-from-right">
               <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
               Interactive Config Explorer
             </div>
-            <h2 class="section-title" data-scroll-type="Test Drive the Dotfiles Right Here">
-              <span class="orbit-type-wrap">
-                <span class="orbit-type-ghost" aria-hidden="true">Test Drive the Dotfiles Right Here</span>
-                <span class="orbit-type-live"></span>
-              </span>
-            </h2>
-            <p class="section-subtitle slide-after-type">
+            <h2 class="section-title slide-from-right delay-1">Test Drive the Dotfiles Right Here</h2>
+            <p class="section-subtitle slide-from-right delay-2">
               Switch live between 6 terminal themes, inspect the Ghostty <code>fastfetch</code> session, browse real Nix flake configs, or filter files instantly.
             </p>
           </div>
@@ -337,7 +304,7 @@
 
               <!-- Bottom Status Bar -->
               <div class="sim-statusbar">
-                <span id="sim-status-left">NixOS 26.05 · 8 tracked views · Host: nixos</span>
+                <span id="sim-status-left">NixOS 26.05 · 6 tracked views · Host: nixos</span>
                 <span>FantasqueSansM Nerd Font Mono · Home Manager</span>
               </div>
             </div>
@@ -348,18 +315,13 @@
       <!-- Core Stack & Dotfiles Bento Grid -->
       <section id="stack" class="section-block">
         <div class="container-6xl">
-          <div class="section-header" data-scroll-heading>
-            <div class="section-badge badge-violet pop-item">Core Stack &amp; Dotfiles</div>
-            <h2 class="section-title" data-scroll-type="Everything Declarative, Tracked in Git">
-              <span class="orbit-type-wrap">
-                <span class="orbit-type-ghost" aria-hidden="true">Everything Declarative, Tracked in Git</span>
-                <span class="orbit-type-live"></span>
-              </span>
-            </h2>
-            <p class="section-subtitle slide-after-type">
+          <div class="section-header">
+            <div class="section-badge badge-violet slide-from-right">Core Stack &amp; Dotfiles</div>
+            <h2 class="section-title slide-from-right delay-1">Everything Declarative, Tracked in Git</h2>
+            <p class="section-subtitle slide-from-right delay-2">
               No drift, no manual mystery tweaks. Every desktop rice, shell prompt, backup timer, and kernel module lives cleanly in Nix.
             </p>
-            <div class="filter-pills slide-after-type" role="group" aria-label="Filter stack features" id="stack-filters">
+            <div class="filter-pills slide-from-right delay-3" role="group" aria-label="Filter stack features" id="stack-filters">
               <button type="button" class="pill-filter active" data-stack-filter="all">All Modules</button>
               <button type="button" class="pill-filter" data-stack-filter="desktop">Desktop &amp; Shell</button>
               <button type="button" class="pill-filter" data-stack-filter="ops">Ops &amp; Backups</button>
@@ -467,21 +429,16 @@
         </div>
       </section>
 
-      <!-- Managed Hosts Section (Orbit Platform Switcher Aesthetic) -->
+      <!-- Managed Hosts Section -->
       <section id="hosts" class="section-block">
         <div class="container-5xl">
-          <div class="section-header" data-scroll-heading>
-            <div class="section-badge badge-emerald pop-item">
+          <div class="section-header">
+            <div class="section-badge badge-emerald slide-from-right">
               <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
               Managed Hosts
             </div>
-            <h2 class="section-title" data-scroll-type="Two Hosts, One Flake Repo">
-              <span class="orbit-type-wrap">
-                <span class="orbit-type-ghost" aria-hidden="true">Two Hosts, One Flake Repo</span>
-                <span class="orbit-type-live"></span>
-              </span>
-            </h2>
-            <p class="section-subtitle slide-after-type">
+            <h2 class="section-title slide-from-right delay-1">Two Hosts, One Flake Repo</h2>
+            <p class="section-subtitle slide-from-right delay-2">
               From a full graphical NixOS workstation to a headless Kubernetes homelab node — both versioned and reproducible.
             </p>
           </div>
@@ -626,15 +583,10 @@
       <!-- Config Architecture Split -->
       <section id="architecture" class="section-block">
         <div class="container-5xl">
-          <div class="section-header" data-scroll-heading>
-            <div class="section-badge badge-amber pop-item">Clean Separation</div>
-            <h2 class="section-title" data-scroll-type="configuration.nix vs home.nix">
-              <span class="orbit-type-wrap">
-                <span class="orbit-type-ghost" aria-hidden="true">configuration.nix vs home.nix</span>
-                <span class="orbit-type-live"></span>
-              </span>
-            </h2>
-            <p class="section-subtitle slide-after-type">
+          <div class="section-header">
+            <div class="section-badge badge-amber slide-from-right">Clean Separation</div>
+            <h2 class="section-title slide-from-right delay-1">configuration.nix vs home.nix</h2>
+            <p class="section-subtitle slide-from-right delay-2">
               One guiding question: <em>"Does this affect every user on the machine, or just my account?"</em>
             </p>
           </div>
@@ -681,15 +633,10 @@
       <!-- Interactive Cheatsheet & Keybindings -->
       <section id="cheatsheet" class="section-block">
         <div class="container-5xl">
-          <div class="section-header" data-scroll-heading>
-            <div class="section-badge badge-violet pop-item">Quick Reference</div>
-            <h2 class="section-title" data-scroll-type="Cheatsheet & Keybindings">
-              <span class="orbit-type-wrap">
-                <span class="orbit-type-ghost" aria-hidden="true">Cheatsheet &amp; Keybindings</span>
-                <span class="orbit-type-live"></span>
-              </span>
-            </h2>
-            <p class="section-subtitle slide-after-type">
+          <div class="section-header">
+            <div class="section-badge badge-violet slide-from-right">Quick Reference</div>
+            <h2 class="section-title slide-from-right delay-1">Cheatsheet &amp; Keybindings</h2>
+            <p class="section-subtitle slide-from-right delay-2">
               One-click copy NixOS operations, WireGuard &amp; Home Manager health checks, and Hyprland shortcuts.
             </p>
           </div>
@@ -873,15 +820,10 @@
       <!-- Repository Structure -->
       <section id="structure" class="section-block">
         <div class="container-5xl">
-          <div class="section-header" data-scroll-heading>
-            <div class="section-badge badge-sky pop-item">Repository Map</div>
-            <h2 class="section-title" data-scroll-type="Clean, Modular Layout">
-              <span class="orbit-type-wrap">
-                <span class="orbit-type-ghost" aria-hidden="true">Clean, Modular Layout</span>
-                <span class="orbit-type-live"></span>
-              </span>
-            </h2>
-            <p class="section-subtitle slide-after-type">
+          <div class="section-header">
+            <div class="section-badge badge-sky slide-from-right">Repository Map</div>
+            <h2 class="section-title slide-from-right delay-1">Clean, Modular Layout</h2>
+            <p class="section-subtitle slide-from-right delay-2">
               Clear separation of NixOS flakes, Home Manager dotfiles, homelab nodes, custom kernel drivers, and GitHub Pages docs.
             </p>
           </div>
@@ -916,22 +858,26 @@
       </section>
     </main>
 
-    <!-- Footer (Orbit Layout) -->
+    <!-- Footer -->
     <footer class="site-footer">
       <div class="container-6xl footer-inner">
         <div class="footer-brand">
           <svg width="26" height="26" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
-              <linearGradient id="footTile" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+              <linearGradient id="footStroke" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stop-color="#a78bfa" />
                 <stop offset="100%" stop-color="#38bdf8" />
               </linearGradient>
             </defs>
-            <rect x="8" y="8" width="240" height="240" rx="60" fill="url(#footTile)" />
-            <circle cx="128" cy="128" r="46" fill="#0b0d17" />
-            <path d="M 28 128 A 100 38 0 0 1 228 128" stroke="white" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
-            <path d="M 228 128 A 100 38 0 0 1 28 128" stroke="white" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
-            <circle cx="62" cy="152" r="20" fill="#fbbf24" stroke="#0f172a" stroke-width="7" />
+            <rect x="10" y="10" width="236" height="236" rx="58" fill="#0b0d17" stroke="url(#footStroke)" stroke-width="12" />
+            <g stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#38bdf8" />
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#a78bfa" transform="rotate(60 128 128)" />
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#38bdf8" transform="rotate(120 128 128)" />
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#a78bfa" transform="rotate(180 128 128)" />
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#38bdf8" transform="rotate(240 128 128)" />
+              <path d="M112 100 H184 M156 100 L170 76" stroke="#a78bfa" transform="rotate(300 128 128)" />
+            </g>
           </svg>
           <div>
             <div class="footer-title">Danny's NixOS &amp; Dotfiles</div>
