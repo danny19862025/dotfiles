@@ -1,528 +1,952 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Danny's NixOS &amp; Dotfiles</title>
-  <meta name="description" content="Declarative NixOS 26.05, Home Manager, Hyprland + GNOME desktop dotfiles, and k3s homelab configuration." />
+  <title>Danny's NixOS &amp; Dotfiles — Declarative Linux from Desktop to Homelab</title>
+  <meta
+    name="description"
+    content="Declarative NixOS 26.05 Flakes, Home Manager, Hyprland + GNOME desktop dotfiles, custom MacBook CS8409 audio driver, automated rclone backups, and k3s homelab configuration."
+  />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='256' y2='256' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0%25' stop-color='%23a78bfa'/%3E%3Cstop offset='100%25' stop-color='%2338bdf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='8' y='8' width='240' height='240' rx='60' fill='url(%23g)'/%3E%3Ccircle cx='128' cy='128' r='52' fill='%230b0d17'/%3E%3Cellipse cx='128' cy='128' rx='98' ry='36' fill='none' stroke='white' stroke-width='16' transform='rotate(-24 128 128)'/%3E%3Ccircle cx='66' cy='150' r='20' fill='%23fbbf24' stroke='%230f172a' stroke-width='7'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+<body class="cosmic-bg">
+  <!-- Top Gradient Scroll Progress Bar -->
+  <div id="scroll-progress" class="orbit-scroll-progress" aria-hidden="true"></div>
 
-  <header class="site-header">
-    <div class="container nav-inner">
-      <a href="#top" class="brand">
-        <span class="brand-dot"></span>
-        <span>danny/dotfiles</span>
-      </a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#hosts">Hosts</a>
-        <a href="#stack">Stack</a>
-        <a href="#architecture">Config Split</a>
-        <a href="#cheatsheet">Cheatsheet</a>
-        <a href="#structure">Repo</a>
-        <a href="https://github.com/danny19862025/dotfiles" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">GitHub ↗</a>
-      </nav>
-    </div>
-  </header>
+  <div class="cosmic-grid page-shell">
+    <!-- Floating Glass Pill Header -->
+    <header class="floating-header" id="site-header">
+      <nav class="space-glass-strong pill-nav" aria-label="Primary navigation">
+        <a href="#top" class="brand-link">
+          <svg class="brand-emblem" width="30" height="30" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="navTile" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#a78bfa" />
+                <stop offset="100%" stop-color="#38bdf8" />
+              </linearGradient>
+              <radialGradient id="navCore" cx="35%" cy="30%" r="70%">
+                <stop offset="0%" stop-color="#313244" />
+                <stop offset="100%" stop-color="#0b0d17" />
+              </radialGradient>
+            </defs>
+            <rect x="8" y="8" width="240" height="240" rx="60" fill="url(#navTile)" />
+            <rect x="8" y="8" width="240" height="118" rx="60" fill="white" fill-opacity="0.18" />
+            <path d="M 28 128 A 100 38 0 0 1 228 128" stroke="white" stroke-opacity="0.92" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
+            <circle cx="128" cy="128" r="46" fill="url(#navCore)" />
+            <path d="M 128 98 L 154 113 L 154 143 L 128 158 L 102 143 L 102 113 Z" stroke="#38bdf8" stroke-width="8" stroke-linejoin="round" fill="none" />
+            <path d="M 228 128 A 100 38 0 0 1 28 128" stroke="white" stroke-opacity="0.95" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
+            <circle cx="62" cy="152" r="20" fill="#fbbf24" stroke="#0f172a" stroke-width="7" />
+          </svg>
+          <span class="brand-name">danny/dotfiles</span>
+          <span class="brand-chip">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            NixOS 26.05
+          </span>
+        </a>
 
-  <main id="top">
-    <!-- Hero -->
-    <section class="hero container">
-      <div class="hero-copy">
-        <div class="pill-row">
-          <span class="pill pill-blue">NixOS 26.05</span>
-          <span class="pill pill-pink">Home Manager</span>
-          <span class="pill pill-cyan">Hyprland + GNOME</span>
-          <span class="pill pill-amber">k3s Homelab</span>
-        </div>
-        <h1>Declarative Linux,<br /><span class="gradient-text">from desktop to homelab.</span></h1>
-        <p class="hero-lead">
-          Danny's personal NixOS Flakes repository — managing a TokyoNight-themed daily driver
-          workstation, Hyprland &amp; Waybar dotfiles, custom MacBook Pro audio drivers, automated
-          rclone backups, and a k3s worker node.
-        </p>
-        <div class="hero-actions">
-          <a href="https://github.com/danny19862025/dotfiles" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-            Explore on GitHub
+        <ul class="nav-list">
+          <li><a href="#explorer">Explorer</a></li>
+          <li><a href="#stack">Stack</a></li>
+          <li><a href="#hosts">Hosts</a></li>
+          <li><a href="#architecture">Config Split</a></li>
+          <li><a href="#cheatsheet">Cheatsheet</a></li>
+          <li><a href="#structure">Repo</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="https://github.com/danny19862025/dotfiles" target="_blank" rel="noopener noreferrer" class="github-pill">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            <span>GitHub</span>
           </a>
-          <a href="#cheatsheet" class="btn btn-ghost">Command Cheatsheet</a>
         </div>
-        <div class="quick-cmd">
-          <code>sudo nixos-rebuild switch --flake .#nixos</code>
-          <button class="copy-btn" data-copy="sudo nixos-rebuild switch --flake .#nixos" aria-label="Copy rebuild command">Copy</button>
-        </div>
-      </div>
+      </nav>
+    </header>
 
-      <!-- Terminal Showcase -->
-      <div class="terminal-card" aria-label="Ghostty terminal preview">
-        <div class="terminal-bar">
-          <div class="terminal-dots">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-          </div>
-          <span class="terminal-title">ghostty — TokyoNight Moon (0.85 opacity)</span>
-        </div>
-        <div class="terminal-body">
-          <div class="starship-line">
-            <span class="seg seg-os">  NixOS </span><span class="seg seg-dir"> ~/dotfiles </span><span class="seg seg-git">  master </span><span class="seg seg-time">  20:35 </span>
-          </div>
-          <div class="prompt-cmd"><span class="prompt-arrow">❯</span> fastfetch</div>
-          <div class="fetch-grid">
-            <pre class="nix-ascii" aria-hidden="true">   ▗▄▄▖ ▗▄▄▖
-  ▗▘  ▝▙▘  ▝▖
- ▗▘ ▗▄▄▖ ▗▄▄▖
- ▝▖ ▝▘ ▝▖▝▘ ▝
-  ▝▖  ▗▛▖  ▗▘
-   ▝▀▀▘ ▝▀▀▘</pre>
-            <dl class="fetch-specs">
-              <div><dt>OS</dt><dd>NixOS 26.05 (x86_64)</dd></div>
-              <div><dt>Hosts</dt><dd>nixos · asus-worker</dd></div>
-              <div><dt>DE / WM</dt><dd>GNOME (GDM) + Hyprland</dd></div>
-              <div><dt>Shell</dt><dd>zsh + starship</dd></div>
-              <div><dt>Terminal</dt><dd>Ghostty · FantasqueSansM</dd></div>
-              <div><dt>Editor</dt><dd>Neovim (default)</dd></div>
-              <div><dt>Network</dt><dd>Tailscale · WireGuard</dd></div>
-              <div><dt>Cluster</dt><dd>k3s agent (192.168.0.11)</dd></div>
-            </dl>
-          </div>
-          <div class="palette-row" aria-label="TokyoNight Moon color palette">
-            <span style="background:#1d2230"></span>
-            <span style="background:#394260"></span>
-            <span style="background:#769ff0"></span>
-            <span style="background:#33ccff"></span>
-            <span style="background:#ff99c8"></span>
-            <span style="background:#a3aed2"></span>
-            <span style="background:#c3e88d"></span>
-            <span style="background:#ffc777"></span>
-          </div>
-        </div>
-      </div>
-    </section>
+    <main id="top">
+      <!-- Hero Section (Immediate Orbit Pop-In + Typewriter, No Countdown) -->
+      <section class="hero-section">
+        <div class="hero-aura" aria-hidden="true"></div>
 
-    <!-- Hosts Section -->
-    <section id="hosts" class="section container">
-      <div class="section-head">
-        <h2>Managed Hosts</h2>
-        <p>Two NixOS 26.05 flake configurations under one roof — daily workstation and homelab compute.</p>
-      </div>
-
-      <div class="host-tabs" role="tablist" aria-label="Select NixOS host">
-        <button class="tab-btn active" role="tab" aria-selected="true" data-host="nixos">
-          <span class="tab-badge">Workstation</span>
-          <strong>nixos</strong>
-        </button>
-        <button class="tab-btn" role="tab" aria-selected="false" data-host="asus-worker">
-          <span class="tab-badge amber">Homelab k3s</span>
-          <strong>asus-worker</strong>
-        </button>
-      </div>
-
-      <div class="host-panels">
-        <!-- nixos panel -->
-        <article class="host-panel active" data-panel="nixos">
-          <div class="host-meta">
-            <div>
-              <h3>nixos — Daily Driver Workstation</h3>
-              <p>Flake-driven NixOS 26.05 desktop combining GNOME stability with a full Hyprland rice, Home Manager user config, Tailscale/WireGuard VPNs, and automated cloud backups.</p>
-            </div>
-            <div class="cmd-inline">
-              <code>sudo nixos-rebuild switch --flake .#nixos</code>
-              <button class="copy-btn" data-copy="sudo nixos-rebuild switch --flake .#nixos">Copy</button>
+        <div class="container-6xl hero-center">
+          <!-- Animated Emblem -->
+          <div class="hero-emblem-wrap pop-on-load">
+            <div class="hero-emblem-frame">
+              <div class="orbit-pop-halo" aria-hidden="true"></div>
+              <svg width="74" height="74" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="heroTile" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#a78bfa" />
+                    <stop offset="100%" stop-color="#38bdf8" />
+                  </linearGradient>
+                  <radialGradient id="heroCore" cx="35%" cy="30%" r="70%">
+                    <stop offset="0%" stop-color="#313244" />
+                    <stop offset="100%" stop-color="#0b0d17" />
+                  </radialGradient>
+                </defs>
+                <rect x="8" y="8" width="240" height="240" rx="60" fill="url(#heroTile)" />
+                <rect x="8" y="8" width="240" height="118" rx="60" fill="white" fill-opacity="0.18" />
+                <path d="M 28 128 A 100 38 0 0 1 228 128" stroke="white" stroke-opacity="0.92" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
+                <circle cx="128" cy="128" r="46" fill="url(#heroCore)" />
+                <path d="M 128 96 L 156 112 L 156 144 L 128 160 L 100 144 L 100 112 Z" stroke="#38bdf8" stroke-width="8" stroke-linejoin="round" fill="none" />
+                <path d="M 228 128 A 100 38 0 0 1 28 128" stroke="white" stroke-opacity="0.95" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
+                <circle class="orbiting-moon" cx="62" cy="152" r="22" fill="#fbbf24" stroke="#0f172a" stroke-width="8" />
+              </svg>
             </div>
           </div>
-          <div class="spec-cards">
-            <div class="spec-card">
-              <h4>Desktop &amp; Wayland</h4>
-              <ul>
-                <li>GNOME + GDM (primary day-to-day session)</li>
-                <li>Hyprland with Pywal, blur &amp; rounded corners</li>
-                <li>Vertical right-side Waybar + SwayNC + Wlogout</li>
-                <li>Wofi &amp; Rofi launchers + cliphist clipboard</li>
+
+          <!-- Status Badge -->
+          <div class="hero-eyebrow pop-on-load delay-1">
+            <svg class="icon-xs text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>Declarative Flakes · NixOS 26.05 · Hyprland + GNOME · k3s Homelab</span>
+          </div>
+
+          <!-- Zero-shift Typewriter Headline -->
+          <h1 class="hero-h1">
+            <span
+              class="orbit-type-wrap"
+              id="hero-h1-type"
+              data-typewriter="Declarative Linux, from Desktop to Homelab."
+              data-highlight="from Desktop to Homelab"
+              data-speed="24"
+            >
+              <span class="orbit-type-ghost" aria-hidden="true">Declarative Linux, <span class="gradient-hero">from Desktop to Homelab</span>.</span>
+              <span class="orbit-type-live"></span>
+            </span>
+          </h1>
+
+          <!-- Zero-shift Typewriter Lead -->
+          <p class="hero-lead">
+            <span
+              class="orbit-type-wrap"
+              id="hero-desc-type"
+              data-typewriter="Danny's personal NixOS Flakes repository — managing a TokyoNight-themed daily driver workstation, Hyprland & Waybar dotfiles, custom MacBook Pro audio drivers, automated rclone backups, and a k3s worker node."
+              data-speed="8"
+              data-caret-sm="true"
+            >
+              <span class="orbit-type-ghost" aria-hidden="true">Danny's personal NixOS Flakes repository — managing a TokyoNight-themed daily driver workstation, Hyprland &amp; Waybar dotfiles, custom MacBook Pro audio drivers, automated rclone backups, and a k3s worker node.</span>
+              <span class="orbit-type-live"></span>
+            </span>
+          </p>
+
+          <!-- Primary CTA Buttons -->
+          <div class="hero-cta-row hero-reveal-step" data-hero-step="1">
+            <a href="https://github.com/danny19862025/dotfiles" target="_blank" rel="noopener noreferrer" class="btn-primary-orbit">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+              <span>Explore on GitHub</span>
+            </a>
+            <a href="#explorer" class="space-glass btn-glass-orbit">
+              <span>Explore Live Configs</span>
+              <svg class="icon-sm text-violet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10"/><path d="M17 7v10H7"/></svg>
+            </a>
+          </div>
+
+          <!-- Platform / Stack Pills -->
+          <div class="hero-pills-row hero-reveal-right" data-hero-step="2">
+            <span class="space-glass meta-pill">
+              <svg class="icon-xs text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+              NixOS 26.05 · Home Manager
+            </span>
+            <span class="space-glass meta-pill">
+              <svg class="icon-xs text-sky" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+              GNOME (GDM) + Hyprland
+            </span>
+            <span class="space-glass meta-pill">
+              <svg class="icon-xs text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/></svg>
+              k3s Agent (192.168.0.11)
+            </span>
+            <span class="space-glass meta-pill">
+              <svg class="icon-xs text-violet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Tailscale · WireGuard · rclone
+            </span>
+          </div>
+
+          <!-- Orbit-style Featured Quick-Rebuild Card -->
+          <div id="how-to-rebuild" class="space-glass-strong orbit-slide-highlight quickstart-card hero-reveal-right" data-hero-step="3">
+            <div class="quickstart-head">
+              <div>
+                <h2 class="quickstart-title">
+                  <span
+                    class="orbit-type-wrap-inline"
+                    id="rebuild-heading-type"
+                    data-typewriter="How to Rebuild & Switch"
+                    data-speed="28"
+                    data-caret-sm="true"
+                  >
+                    <span class="orbit-type-ghost" aria-hidden="true">How to Rebuild &amp; Switch</span>
+                    <span class="orbit-type-live"></span>
+                  </span>
+                </h2>
+                <p class="quickstart-sub">One flake command applies system packages, services, Home Manager, and all symlinked dotfiles together.</p>
+              </div>
+              <div class="host-mini-toggle" role="tablist" aria-label="Quick rebuild target">
+                <button type="button" class="mini-toggle-btn active" role="tab" aria-selected="true" data-quick-host="nixos">
+                  <svg class="icon-xs text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                  nixos
+                </button>
+                <button type="button" class="mini-toggle-btn" role="tab" aria-selected="false" data-quick-host="asus-worker">
+                  <svg class="icon-xs text-sky" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+                  asus-worker
+                </button>
+              </div>
+            </div>
+
+            <!-- Workstation Quick Steps -->
+            <div class="quickstart-body active" data-quick-panel="nixos">
+              <ol class="step-grid">
+                <li class="step-tile">
+                  <span class="step-kicker text-violet">1. Edit Source</span>
+                  <p>Modify <code>configuration.nix</code>, <code>home.nix</code>, or <code>dotfiles/*</code> under <code>/etc/nixos</code>.</p>
+                </li>
+                <li class="step-tile">
+                  <span class="step-kicker text-violet">2. Rebuild Flake</span>
+                  <p>Switch both NixOS 26.05 and Home Manager atomically with rollback support.</p>
+                </li>
+                <li class="step-tile">
+                  <span class="step-kicker text-violet">3. Bump Inputs</span>
+                  <p>Run <code>sudo nix flake update</code> or update just <code>zen-browser</code> when needed.</p>
+                </li>
+              </ol>
+              <div class="cmd-box">
+                <div class="cmd-box-head">
+                  <span class="cmd-label">Primary workstation rebuild (NixOS + Home Manager)</span>
+                  <button type="button" class="copy-pill" data-copy="cd /etc/nixos && sudo nixos-rebuild switch --flake .#nixos">
+                    <svg class="icon-xxs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="cmd-pre"><code id="rebuild-cmd-nixos" class="orbit-type-wrap-inline" data-typewriter="cd /etc/nixos && sudo nixos-rebuild switch --flake .#nixos" data-speed="14" data-caret-sm="true" data-keep-caret="true"><span class="orbit-type-ghost" aria-hidden="true">cd /etc/nixos &amp;&amp; sudo nixos-rebuild switch --flake .#nixos</span><span class="orbit-type-live"></span></code></pre>
+              </div>
+            </div>
+
+            <!-- Homelab Worker Quick Steps -->
+            <div class="quickstart-body" data-quick-panel="asus-worker">
+              <ol class="step-grid">
+                <li class="step-tile">
+                  <span class="step-kicker text-sky">1. Place k3s Token</span>
+                  <p>Ensure the cluster join token is stored securely at <code>/etc/k3s-token</code>.</p>
+                </li>
+                <li class="step-tile">
+                  <span class="step-kicker text-sky">2. Apply Worker Flake</span>
+                  <p>Configures static IP <code>192.168.0.11/24</code>, firewall rules, and <code>k3s</code> agent.</p>
+                </li>
+                <li class="step-tile">
+                  <span class="step-kicker text-sky">3. Verify Node</span>
+                  <p>Connects to control plane <code>192.168.0.10:6443</code> with <code>kubectl</code> ready.</p>
+                </li>
+              </ol>
+              <div class="cmd-box">
+                <div class="cmd-box-head">
+                  <span class="cmd-label">Homelab k3s worker node rebuild</span>
+                  <button type="button" class="copy-pill" data-copy="cd /etc/nixos && sudo nixos-rebuild switch --flake ./asus-worker#asus-worker">
+                    <svg class="icon-xxs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="cmd-pre"><code>cd /etc/nixos &amp;&amp; sudo nixos-rebuild switch --flake ./asus-worker#asus-worker<span class="orbit-caret orbit-caret-sm" aria-hidden="true"></span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Config & Ghostty Terminal Explorer (Orbit Simulator Aesthetic) -->
+      <section id="explorer" class="section-block">
+        <div class="container-6xl">
+          <div class="section-header" data-scroll-heading>
+            <div class="section-badge badge-sky pop-item">
+              <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+              Interactive Config Explorer
+            </div>
+            <h2 class="section-title" data-scroll-type="Test Drive the Dotfiles Right Here">
+              <span class="orbit-type-wrap">
+                <span class="orbit-type-ghost" aria-hidden="true">Test Drive the Dotfiles Right Here</span>
+                <span class="orbit-type-live"></span>
+              </span>
+            </h2>
+            <p class="section-subtitle slide-after-type">
+              Switch live between 6 terminal themes, inspect the Ghostty <code>fastfetch</code> session, browse real Nix flake configs, or filter files instantly.
+            </p>
+          </div>
+
+          <!-- Live Theme Switcher Bar -->
+          <div id="themes" class="space-glass theme-bar slide-from-right">
+            <div class="theme-bar-label">
+              <svg class="icon-sm text-violet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+              <span>Live Theme:</span>
+              <strong id="active-theme-name">TokyoNight Moon</strong>
+            </div>
+            <div class="theme-pills" id="theme-pills" role="group" aria-label="Choose preview theme"></div>
+          </div>
+
+          <!-- Simulated Desktop / Terminal Window -->
+          <div class="slide-from-right delay-1">
+            <div class="sim-window" id="dotfiles-sim">
+              <!-- Top Window Chrome -->
+              <div class="sim-topbar">
+                <div class="sim-topbar-left">
+                  <div class="traffic-lights" aria-hidden="true">
+                    <span class="tl tl-red"></span>
+                    <span class="tl tl-amber"></span>
+                    <span class="tl tl-green"></span>
+                  </div>
+                  <div class="sim-tabs" id="sim-tabs" role="tablist" aria-label="Config views"></div>
+                </div>
+                <div class="sim-topbar-right">
+                  <span class="sim-meta-tag" id="sim-meta-tag">ghostty · 0.85 opacity</span>
+                  <button type="button" class="sim-copy-btn" id="sim-copy-btn">
+                    <svg class="icon-xxs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    <span>Copy View</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Path & Instant Filter Strip -->
+              <div class="sim-pathbar">
+                <div class="sim-path">
+                  <svg class="icon-xs sim-accent-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+                  <span id="sim-current-path">~/dotfiles/ghostty — fastfetch</span>
+                </div>
+                <div class="sim-search-wrap">
+                  <svg class="icon-xs sim-muted-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  <input type="text" id="sim-filter-input" placeholder="Fuzzy filter repo files..." aria-label="Filter repository files" />
+                  <span class="sim-speed-pill">0.2ms</span>
+                </div>
+              </div>
+
+              <!-- Main Split Body -->
+              <div class="sim-body">
+                <!-- Sidebar File Navigator -->
+                <aside class="sim-sidebar orbit-scroll">
+                  <div class="sim-sidebar-heading">Flake &amp; Dotfiles</div>
+                  <div class="sim-file-list" id="sim-file-list"></div>
+
+                  <div class="sim-palette-card">
+                    <div class="sim-sidebar-heading" style="margin-bottom: 0.45rem;">Active Palette</div>
+                    <div class="sim-swatches" id="sim-swatches"></div>
+                  </div>
+                </aside>
+
+                <!-- Main Pane -->
+                <div class="sim-content orbit-scroll" id="sim-content"></div>
+              </div>
+
+              <!-- Bottom Status Bar -->
+              <div class="sim-statusbar">
+                <span id="sim-status-left">NixOS 26.05 · 8 tracked views · Host: nixos</span>
+                <span>FantasqueSansM Nerd Font Mono · Home Manager</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Core Stack & Dotfiles Bento Grid -->
+      <section id="stack" class="section-block">
+        <div class="container-6xl">
+          <div class="section-header" data-scroll-heading>
+            <div class="section-badge badge-violet pop-item">Core Stack &amp; Dotfiles</div>
+            <h2 class="section-title" data-scroll-type="Everything Declarative, Tracked in Git">
+              <span class="orbit-type-wrap">
+                <span class="orbit-type-ghost" aria-hidden="true">Everything Declarative, Tracked in Git</span>
+                <span class="orbit-type-live"></span>
+              </span>
+            </h2>
+            <p class="section-subtitle slide-after-type">
+              No drift, no manual mystery tweaks. Every desktop rice, shell prompt, backup timer, and kernel module lives cleanly in Nix.
+            </p>
+            <div class="filter-pills slide-after-type" role="group" aria-label="Filter stack features" id="stack-filters">
+              <button type="button" class="pill-filter active" data-stack-filter="all">All Modules</button>
+              <button type="button" class="pill-filter" data-stack-filter="desktop">Desktop &amp; Shell</button>
+              <button type="button" class="pill-filter" data-stack-filter="ops">Ops &amp; Backups</button>
+              <button type="button" class="pill-filter" data-stack-filter="hardware">Hardware &amp; Flakes</button>
+            </div>
+          </div>
+
+          <div class="bento-grid" id="stack-grid">
+            <article class="space-glass bento-card bento-wide slide-from-right" data-stack-cat="desktop">
+              <div class="bento-head">
+                <div class="bento-icon-box">
+                  <svg class="icon-md text-violet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                </div>
+                <span class="bento-badge">Wayland + GDM</span>
+              </div>
+              <h3>Hyprland Rice + GNOME Daily Driver</h3>
+              <p>Best of both worlds: rock-solid GNOME with GDM &amp; NetworkManager for day-to-day stability, paired with a full Hyprland setup symlinked declaratively via Home Manager.</p>
+              <ul class="bento-checks">
+                <li>Smooth bezier animations, 2-pass blur &amp; 15px rounded corners</li>
+                <li>Vertical right-docked Waybar with MPRIS, audio slider &amp; SwayNC</li>
+                <li>Wofi &amp; Rofi launchers, Wlogout power menu, cliphist clipboard &amp; Pywal colors</li>
               </ul>
-            </div>
-            <div class="spec-card">
-              <h4>Apps &amp; Dev Tools</h4>
-              <ul>
-                <li>Zen Browser (flake input), Brave, Firefox</li>
-                <li>Ghostty (TokyoNight Moon), Kitty, tmux</li>
-                <li>Neovim, Claude Code, git, bat, btop, htop</li>
-                <li>Flatpak + PipeWire (ALSA 32-bit + Pulse)</li>
+            </article>
+
+            <article class="space-glass bento-card slide-from-right delay-1" data-stack-cat="desktop">
+              <div class="bento-head">
+                <div class="bento-icon-box">
+                  <svg class="icon-md text-violet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+                </div>
+                <span class="bento-badge">0.85 Opacity</span>
+              </div>
+              <h3>Ghostty Terminal</h3>
+              <p>Managed via <code>programs.ghostty</code> in Home Manager with TokyoNight Moon colors, translucent glass blur, and crisp Nerd Font typography.</p>
+              <ul class="bento-checks">
+                <li>TokyoNight Moon palette at 0.85 opacity</li>
+                <li>FantasqueSansM Nerd Font Mono (16pt)</li>
+                <li>110×45 default window + Kitty theme backups</li>
               </ul>
-            </div>
-            <div class="spec-card">
-              <h4>Networking &amp; Ops</h4>
-              <ul>
-                <li>Tailscale + WireGuard (UDP 51820) + OpenSSH</li>
-                <li>NetworkManager + wpa_supplicant</li>
-                <li>rclone systemd timers → <code>NixosBackup</code></li>
-                <li>Weekly Nix GC (<code>--delete-older-than 7d</code>)</li>
+            </article>
+
+            <article class="space-glass bento-card slide-from-right delay-1" data-stack-cat="desktop">
+              <div class="bento-head">
+                <div class="bento-icon-box">
+                  <svg class="icon-md text-violet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+                </div>
+                <span class="bento-badge">Powerline</span>
+              </div>
+              <h3>Zsh + Starship + Neovim</h3>
+              <p>Fast interactive shell greeting with <code>fastfetch</code>, live autosuggestions, syntax highlighting, and Neovim wired as the default editor.</p>
+              <ul class="bento-checks">
+                <li>Starship segments for Git, Rust, Go, Node, Bun &amp; PHP</li>
+                <li><code>bat</code> aliased to <code>cat</code>, <code>ll</code> to <code>ls -la</code></li>
+                <li>Neovim default editor with <code>vi</code> &amp; <code>vim</code> aliases</li>
               </ul>
-            </div>
-            <div class="spec-card">
-              <h4>Hardware &amp; Locale</h4>
-              <ul>
-                <li>Timezone: <code>Australia/Sydney</code> · Locale: <code>en_AU.UTF-8</code></li>
-                <li>Custom <code>snd-hda-cs8409.nix</code> derivation</li>
-                <li>Cirrus CS8409 audio for 2016/2017 MacBook Pro</li>
-                <li>systemd-boot EFI + auto-optimise Nix store</li>
+            </article>
+
+            <article class="space-glass bento-card slide-from-right delay-2" data-stack-cat="ops">
+              <div class="bento-head">
+                <div class="bento-icon-box">
+                  <svg class="icon-md text-violet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                </div>
+                <span class="bento-badge">Systemd Timers</span>
+              </div>
+              <h3>Automated rclone Backups</h3>
+              <p>Zero-effort off-site backups via systemd user timers syncing <code>~/Documents</code> to <code>NixosBackup:NixosBackup</code> after network comes online.</p>
+              <ul class="bento-checks">
+                <li>5-minute boot delay + hourly recurring sync</li>
+                <li>Tailscale &amp; WireGuard (UDP 51820) mesh VPN</li>
+                <li>Weekly Nix store GC (<code>--delete-older-than 7d</code>)</li>
               </ul>
-            </div>
-          </div>
-        </article>
+            </article>
 
-        <!-- asus-worker panel -->
-        <article class="host-panel" data-panel="asus-worker">
-          <div class="host-meta">
-            <div>
-              <h3>asus-worker — Homelab k3s Agent Node</h3>
-              <p>Minimal, reproducible NixOS 26.05 server joining the homelab Kubernetes cluster with declarative static networking and locked-down firewall rules.</p>
-            </div>
-            <div class="cmd-inline">
-              <code>sudo nixos-rebuild switch --flake ./asus-worker#asus-worker</code>
-              <button class="copy-btn" data-copy="sudo nixos-rebuild switch --flake ./asus-worker#asus-worker">Copy</button>
-            </div>
-          </div>
-          <div class="spec-cards">
-            <div class="spec-card">
-              <h4>Kubernetes (k3s)</h4>
-              <ul>
-                <li>Role: <code>agent</code> (<code>--node-name=asus-worker</code>)</li>
-                <li>Control plane: <code>https://192.168.0.10:6443</code></li>
-                <li>Cluster token loaded via <code>/etc/k3s-token</code></li>
-                <li><code>kubectl</code> pre-installed for diagnostics</li>
+            <article class="space-glass bento-card slide-from-right delay-2" data-stack-cat="hardware">
+              <div class="bento-head">
+                <div class="bento-icon-box">
+                  <svg class="icon-md text-violet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                </div>
+                <span class="bento-badge">Kernel Module</span>
+              </div>
+              <h3>MacBook CS8409 Audio Driver</h3>
+              <p>Custom Nix derivation (<code>packages/snd-hda-cs8409.nix</code>) patching and building Cirrus Logic CS8409 speaker audio for 2016/2017 MacBook Pro hardware.</p>
+              <ul class="bento-checks">
+                <li>Reproducible out-of-tree kernel module build</li>
+                <li>PipeWire with 32-bit ALSA &amp; Pulse compatibility</li>
+                <li>EFI systemd-boot + auto-optimised Nix store</li>
               </ul>
-            </div>
-            <div class="spec-card">
-              <h4>Static Networking</h4>
-              <ul>
-                <li>Interface: <code>enp2s0</code> (DHCP disabled)</li>
-                <li>Static IPv4: <code>192.168.0.11/24</code></li>
-                <li>Gateway: <code>192.168.0.1</code></li>
-                <li>DNS: <code>192.168.0.10</code>, <code>1.1.1.1</code></li>
+            </article>
+
+            <article class="space-glass bento-card slide-from-right delay-3" data-stack-cat="hardware">
+              <div class="bento-head">
+                <div class="bento-icon-box">
+                  <svg class="icon-md text-violet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                </div>
+                <span class="bento-badge">Flake Inputs</span>
+              </div>
+              <h3>Shared Nixpkgs &amp; Zen Browser</h3>
+              <p>Pinned cleanly to <code>nixos-26.05</code> with <code>zen-browser</code> and <code>home-manager</code> following the shared <code>nixpkgs</code> input to eliminate duplicate downloads.</p>
+              <ul class="bento-checks">
+                <li>Zero duplicate nixpkgs evaluations via <code>follows</code></li>
+                <li>Safe <code>backupFileExtension = "backup"</code> guard</li>
+                <li>Zen Browser, Brave, Firefox &amp; Claude Code ready</li>
               </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Managed Hosts Section (Orbit Platform Switcher Aesthetic) -->
+      <section id="hosts" class="section-block">
+        <div class="container-5xl">
+          <div class="section-header" data-scroll-heading>
+            <div class="section-badge badge-emerald pop-item">
+              <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+              Managed Hosts
             </div>
-            <div class="spec-card">
-              <h4>Firewall &amp; SSH</h4>
-              <ul>
-                <li>Firewall enabled by default</li>
-                <li>TCP allowed: <code>22</code> (SSH), <code>10250</code> (kubelet)</li>
-                <li>UDP allowed: <code>8472</code> (Flannel VXLAN)</li>
-                <li>OpenSSH with <code>PermitRootLogin = "no"</code></li>
+            <h2 class="section-title" data-scroll-type="Two Hosts, One Flake Repo">
+              <span class="orbit-type-wrap">
+                <span class="orbit-type-ghost" aria-hidden="true">Two Hosts, One Flake Repo</span>
+                <span class="orbit-type-live"></span>
+              </span>
+            </h2>
+            <p class="section-subtitle slide-after-type">
+              From a full graphical NixOS workstation to a headless Kubernetes homelab node — both versioned and reproducible.
+            </p>
+          </div>
+
+          <div class="slide-from-right">
+            <div class="host-switcher" role="tablist" aria-label="Select NixOS host">
+              <button type="button" class="host-switch-btn active" role="tab" aria-selected="true" data-host="nixos">
+                <svg class="icon-sm text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                <span>nixos · Workstation</span>
+              </button>
+              <button type="button" class="host-switch-btn" role="tab" aria-selected="false" data-host="asus-worker">
+                <svg class="icon-sm text-sky" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+                <span>asus-worker · Homelab k3s</span>
+              </button>
+            </div>
+
+            <!-- nixos Host Card -->
+            <article class="space-glass-strong host-card active" data-host-panel="nixos">
+              <div class="host-card-head">
+                <div>
+                  <h3>nixos — Daily Driver Workstation</h3>
+                  <p class="host-desc">Flake-driven NixOS 26.05 desktop combining GNOME stability with a full Hyprland rice, Home Manager user config, Tailscale/WireGuard VPNs, and automated cloud backups.</p>
+                  <div class="format-tags">
+                    <span>NixOS 26.05</span>
+                    <span>x86_64-linux</span>
+                    <span>Home Manager</span>
+                    <span>Australia/Sydney</span>
+                  </div>
+                </div>
+                <div class="host-head-actions">
+                  <button type="button" class="btn-primary-sm copy-pill-primary" data-copy="sudo nixos-rebuild switch --flake .#nixos">
+                    <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    <span>Copy Rebuild Cmd</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="host-spec-grid">
+                <div class="host-spec-tile">
+                  <h4>Desktop &amp; Wayland</h4>
+                  <ul>
+                    <li>GNOME + GDM (primary day-to-day session)</li>
+                    <li>Hyprland with Pywal, blur &amp; rounded corners</li>
+                    <li>Vertical right-side Waybar + SwayNC + Wlogout</li>
+                    <li>Wofi &amp; Rofi launchers + cliphist clipboard</li>
+                  </ul>
+                </div>
+                <div class="host-spec-tile">
+                  <h4>Apps &amp; Dev Tools</h4>
+                  <ul>
+                    <li>Zen Browser (flake input), Brave, Firefox</li>
+                    <li>Ghostty (TokyoNight Moon), Kitty, tmux</li>
+                    <li>Neovim, Claude Code, git, bat, btop, htop</li>
+                    <li>Flatpak + PipeWire (ALSA 32-bit + Pulse)</li>
+                  </ul>
+                </div>
+                <div class="host-spec-tile">
+                  <h4>Networking &amp; Ops</h4>
+                  <ul>
+                    <li>Tailscale + WireGuard (UDP 51820) + OpenSSH</li>
+                    <li>NetworkManager + wpa_supplicant</li>
+                    <li>rclone systemd timers → <code>NixosBackup</code></li>
+                    <li>Weekly Nix GC (<code>--delete-older-than 7d</code>)</li>
+                  </ul>
+                </div>
+                <div class="host-spec-tile">
+                  <h4>Hardware &amp; Locale</h4>
+                  <ul>
+                    <li>Timezone: <code>Australia/Sydney</code> · <code>en_AU.UTF-8</code></li>
+                    <li>Custom <code>snd-hda-cs8409.nix</code> derivation</li>
+                    <li>Cirrus CS8409 audio for 2016/2017 MacBook Pro</li>
+                    <li>systemd-boot EFI + auto-optimise Nix store</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <!-- asus-worker Host Card -->
+            <article class="space-glass-strong host-card" data-host-panel="asus-worker">
+              <div class="host-card-head">
+                <div>
+                  <h3>asus-worker — Homelab k3s Agent Node</h3>
+                  <p class="host-desc">Minimal, reproducible NixOS 26.05 server joining the homelab Kubernetes cluster with declarative static networking and locked-down firewall rules.</p>
+                  <div class="format-tags">
+                    <span>NixOS 26.05</span>
+                    <span>k3s agent</span>
+                    <span>192.168.0.11/24</span>
+                    <span>enp2s0 static</span>
+                  </div>
+                </div>
+                <div class="host-head-actions">
+                  <button type="button" class="btn-primary-sm copy-pill-primary" data-copy="sudo nixos-rebuild switch --flake ./asus-worker#asus-worker">
+                    <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    <span>Copy Worker Cmd</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="host-spec-grid">
+                <div class="host-spec-tile">
+                  <h4>Kubernetes (k3s)</h4>
+                  <ul>
+                    <li>Role: <code>agent</code> (<code>--node-name=asus-worker</code>)</li>
+                    <li>Control plane: <code>https://192.168.0.10:6443</code></li>
+                    <li>Cluster token loaded via <code>/etc/k3s-token</code></li>
+                    <li><code>kubectl</code> pre-installed for diagnostics</li>
+                  </ul>
+                </div>
+                <div class="host-spec-tile">
+                  <h4>Static Networking</h4>
+                  <ul>
+                    <li>Interface: <code>enp2s0</code> (DHCP disabled)</li>
+                    <li>Static IPv4: <code>192.168.0.11/24</code></li>
+                    <li>Gateway: <code>192.168.0.1</code></li>
+                    <li>DNS: <code>192.168.0.10</code>, <code>1.1.1.1</code></li>
+                  </ul>
+                </div>
+                <div class="host-spec-tile">
+                  <h4>Firewall &amp; SSH</h4>
+                  <ul>
+                    <li>Firewall enabled by default</li>
+                    <li>TCP allowed: <code>22</code> (SSH), <code>10250</code> (kubelet)</li>
+                    <li>UDP allowed: <code>8472</code> (Flannel VXLAN)</li>
+                    <li>OpenSSH with <code>PermitRootLogin = "no"</code></li>
+                  </ul>
+                </div>
+                <div class="host-spec-tile">
+                  <h4>Shell &amp; Utilities</h4>
+                  <ul>
+                    <li>Zsh with autosuggestions &amp; syntax highlighting</li>
+                    <li><code>vim</code>, <code>git</code>, <code>curl</code>, <code>wget</code></li>
+                    <li><code>btop</code>, <code>htop</code>, <code>bat</code>, <code>fastfetch</code></li>
+                    <li>Experimental <code>nix-command</code> &amp; <code>flakes</code> enabled</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Config Architecture Split -->
+      <section id="architecture" class="section-block">
+        <div class="container-5xl">
+          <div class="section-header" data-scroll-heading>
+            <div class="section-badge badge-amber pop-item">Clean Separation</div>
+            <h2 class="section-title" data-scroll-type="configuration.nix vs home.nix">
+              <span class="orbit-type-wrap">
+                <span class="orbit-type-ghost" aria-hidden="true">configuration.nix vs home.nix</span>
+                <span class="orbit-type-live"></span>
+              </span>
+            </h2>
+            <p class="section-subtitle slide-after-type">
+              One guiding question: <em>"Does this affect every user on the machine, or just my account?"</em>
+            </p>
+          </div>
+
+          <div class="split-grid">
+            <article class="space-glass-strong split-card slide-from-right">
+              <div class="split-head">
+                <span class="split-pill pill-sky">System-wide</span>
+                <h3>/etc/nixos/configuration.nix</h3>
+              </div>
+              <ul class="bento-checks">
+                <li>Hostname, timezone (<code>Australia/Sydney</code>) &amp; locale</li>
+                <li>System services: Tailscale, OpenSSH, PipeWire, CUPS, GDM</li>
+                <li>Bootloader, CS8409 kernel module &amp; firewall rules</li>
+                <li>System packages (<code>environment.systemPackages</code>)</li>
+                <li>rclone systemd timers &amp; weekly Nix garbage collection</li>
               </ul>
-            </div>
-            <div class="spec-card">
-              <h4>Shell &amp; Utilities</h4>
-              <ul>
-                <li>Zsh with autosuggestions &amp; syntax highlighting</li>
-                <li><code>vim</code>, <code>git</code>, <code>curl</code>, <code>wget</code></li>
-                <li><code>btop</code>, <code>htop</code>, <code>bat</code>, <code>fastfetch</code></li>
-                <li>Experimental <code>nix-command</code> &amp; <code>flakes</code> enabled</li>
+            </article>
+
+            <article class="space-glass-strong split-card slide-from-right delay-1">
+              <div class="split-head">
+                <span class="split-pill pill-violet">User-level</span>
+                <h3>/etc/nixos/home.nix</h3>
+              </div>
+              <ul class="bento-checks">
+                <li>Git identity (<code>programs.git</code>) &amp; user CLI tools</li>
+                <li>Zsh aliases, autosuggestions &amp; Starship integration</li>
+                <li>Ghostty terminal theme, opacity &amp; Nerd Font</li>
+                <li>Neovim as default editor (<code>vi</code> / <code>vim</code> aliases)</li>
+                <li>Recursive symlinks for <code>hypr</code>, <code>waybar</code>, <code>rofi</code>, <code>wofi</code>, <code>wlogout</code></li>
               </ul>
+            </article>
+          </div>
+
+          <div class="golden-rule slide-from-right delay-2">
+            <svg class="icon-sm text-amber shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+            <p>
+              <strong>Golden Rule:</strong> Never edit Home Manager–managed files directly inside <code>~/.config/</code> — they are read-only symlinks into the Nix store. Always edit under <code>/etc/nixos/</code> and run <code>nixos-rebuild switch</code>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Cheatsheet & Keybindings -->
+      <section id="cheatsheet" class="section-block">
+        <div class="container-5xl">
+          <div class="section-header" data-scroll-heading>
+            <div class="section-badge badge-violet pop-item">Quick Reference</div>
+            <h2 class="section-title" data-scroll-type="Cheatsheet & Keybindings">
+              <span class="orbit-type-wrap">
+                <span class="orbit-type-ghost" aria-hidden="true">Cheatsheet &amp; Keybindings</span>
+                <span class="orbit-type-live"></span>
+              </span>
+            </h2>
+            <p class="section-subtitle slide-after-type">
+              One-click copy NixOS operations, WireGuard &amp; Home Manager health checks, and Hyprland shortcuts.
+            </p>
+          </div>
+
+          <div class="slide-from-right">
+            <div class="cheat-toolbar">
+              <div class="filter-pills" style="margin-top:0" role="group" aria-label="Filter cheatsheet">
+                <button type="button" class="pill-filter active" data-cheat-filter="all">All</button>
+                <button type="button" class="pill-filter" data-cheat-filter="nixos">NixOS &amp; Flakes</button>
+                <button type="button" class="pill-filter" data-cheat-filter="health">Health &amp; VPN</button>
+                <button type="button" class="pill-filter" data-cheat-filter="hypr">Hyprland Keys</button>
+              </div>
+              <div class="cheat-search-box">
+                <svg class="icon-xs text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="search" id="cheat-search" placeholder="Filter commands or keys..." aria-label="Filter commands or keybindings" />
+              </div>
+            </div>
+
+            <div class="cheat-list" id="cheat-list">
+              <!-- NixOS & Flakes -->
+              <div class="space-glass cheat-row" data-cat="nixos">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-violet"></span>
+                  <div class="min-w-0">
+                    <strong>Rebuild &amp; switch NixOS + Home Manager</strong>
+                    <code>sudo nixos-rebuild switch --flake .#nixos</code>
+                  </div>
+                </div>
+                <button type="button" class="copy-pill" data-copy="sudo nixos-rebuild switch --flake .#nixos"><span>Copy</span></button>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="nixos">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-violet"></span>
+                  <div class="min-w-0">
+                    <strong>Update all flake inputs</strong>
+                    <code>sudo nix flake update</code>
+                  </div>
+                </div>
+                <button type="button" class="copy-pill" data-copy="sudo nix flake update"><span>Copy</span></button>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="nixos">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-violet"></span>
+                  <div class="min-w-0">
+                    <strong>Update only Zen Browser flake input</strong>
+                    <code>sudo nix flake lock --update-input zen-browser</code>
+                  </div>
+                </div>
+                <button type="button" class="copy-pill" data-copy="sudo nix flake lock --update-input zen-browser"><span>Copy</span></button>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="nixos">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-violet"></span>
+                  <div class="min-w-0">
+                    <strong>Rebuild homelab k3s worker node</strong>
+                    <code>sudo nixos-rebuild switch --flake ./asus-worker#asus-worker</code>
+                  </div>
+                </div>
+                <button type="button" class="copy-pill" data-copy="sudo nixos-rebuild switch --flake ./asus-worker#asus-worker"><span>Copy</span></button>
+              </div>
+
+              <!-- Health & VPN -->
+              <div class="space-glass cheat-row" data-cat="health">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-sky"></span>
+                  <div class="min-w-0">
+                    <strong>Check Home Manager service logs</strong>
+                    <code>journalctl -u home-manager-danny.service -n 40 --no-pager</code>
+                  </div>
+                </div>
+                <button type="button" class="copy-pill" data-copy="journalctl -u home-manager-danny.service -n 40 --no-pager"><span>Copy</span></button>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="health">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-sky"></span>
+                  <div class="min-w-0">
+                    <strong>Verify WireGuard tunnel &amp; NetworkManager ownership</strong>
+                    <code>nmcli connection show &amp;&amp; sudo wg show</code>
+                  </div>
+                </div>
+                <button type="button" class="copy-pill" data-copy="nmcli connection show && sudo wg show"><span>Copy</span></button>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="health">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-sky"></span>
+                  <div class="min-w-0">
+                    <strong>Fast-reload Waybar for CSS preview</strong>
+                    <code>killall waybar &amp;&amp; waybar &amp;</code>
+                  </div>
+                </div>
+                <button type="button" class="copy-pill" data-copy="killall waybar && waybar &"><span>Copy</span></button>
+              </div>
+
+              <!-- Hyprland Keys -->
+              <div class="space-glass cheat-row" data-cat="hypr">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-amber"></span>
+                  <div class="min-w-0">
+                    <strong>Open Ghostty Terminal</strong>
+                    <div class="kbd-line"><kbd>Super</kbd> + <kbd>Q</kbd></div>
+                  </div>
+                </div>
+                <span class="key-badge">Hyprland</span>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="hypr">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-amber"></span>
+                  <div class="min-w-0">
+                    <strong>Close Active Window</strong>
+                    <div class="kbd-line"><kbd>Super</kbd> + <kbd>C</kbd></div>
+                  </div>
+                </div>
+                <span class="key-badge">Hyprland</span>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="hypr">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-amber"></span>
+                  <div class="min-w-0">
+                    <strong>App Launcher (Wofi / Rofi)</strong>
+                    <div class="kbd-line"><kbd>Super</kbd> + <kbd>R</kbd> <span class="kbd-sep">or</span> <kbd>Super</kbd> + <kbd>Space</kbd></div>
+                  </div>
+                </div>
+                <span class="key-badge">Hyprland</span>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="hypr">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-amber"></span>
+                  <div class="min-w-0">
+                    <strong>File Manager (Thunar)</strong>
+                    <div class="kbd-line"><kbd>Super</kbd> + <kbd>E</kbd></div>
+                  </div>
+                </div>
+                <span class="key-badge">Hyprland</span>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="hypr">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-amber"></span>
+                  <div class="min-w-0">
+                    <strong>Clipboard History (cliphist + Rofi)</strong>
+                    <div class="kbd-line"><kbd>Super</kbd> + <kbd>V</kbd></div>
+                  </div>
+                </div>
+                <span class="key-badge">Hyprland</span>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="hypr">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-amber"></span>
+                  <div class="min-w-0">
+                    <strong>Region Screenshot (grim + slurp)</strong>
+                    <div class="kbd-line"><kbd>Print</kbd></div>
+                  </div>
+                </div>
+                <span class="key-badge">Hyprland</span>
+              </div>
+
+              <div class="space-glass cheat-row" data-cat="hypr">
+                <div class="cheat-info">
+                  <span class="cat-dot dot-amber"></span>
+                  <div class="min-w-0">
+                    <strong>Move Focus / Move Active Window</strong>
+                    <div class="kbd-line"><kbd>Super</kbd> + <kbd>Arrows</kbd> <span class="kbd-sep">/</span> <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Arrows</kbd></div>
+                  </div>
+                </div>
+                <span class="key-badge">Hyprland</span>
+              </div>
             </div>
           </div>
-        </article>
+        </div>
+      </section>
+
+      <!-- Repository Structure -->
+      <section id="structure" class="section-block">
+        <div class="container-5xl">
+          <div class="section-header" data-scroll-heading>
+            <div class="section-badge badge-sky pop-item">Repository Map</div>
+            <h2 class="section-title" data-scroll-type="Clean, Modular Layout">
+              <span class="orbit-type-wrap">
+                <span class="orbit-type-ghost" aria-hidden="true">Clean, Modular Layout</span>
+                <span class="orbit-type-live"></span>
+              </span>
+            </h2>
+            <p class="section-subtitle slide-after-type">
+              Clear separation of NixOS flakes, Home Manager dotfiles, homelab nodes, custom kernel drivers, and GitHub Pages docs.
+            </p>
+          </div>
+
+          <div class="space-glass-strong tree-shell slide-from-right">
+            <div class="tree-bar">
+              <div class="traffic-lights" aria-hidden="true">
+                <span class="tl tl-red"></span>
+                <span class="tl tl-amber"></span>
+                <span class="tl tl-green"></span>
+              </div>
+              <span class="tree-title">github.com/danny19862025/dotfiles</span>
+              <a href="https://github.com/danny19862025/dotfiles" target="_blank" rel="noopener noreferrer" class="tree-open-link">Browse Tree ↗</a>
+            </div>
+            <pre class="tree-code orbit-scroll"><code><span class="t-dir">danny19862025/dotfiles</span>
+├── <span class="t-file">flake.nix</span>                  <span class="t-note"># Main NixOS 26.05 + Home Manager + Zen Browser flake</span>
+├── <span class="t-file">configuration.nix</span>          <span class="t-note"># Workstation system config (GNOME, Hyprland, Tailscale, rclone)</span>
+├── <span class="t-file">home.nix</span>                   <span class="t-note"># User config (zsh, starship, ghostty, neovim, git, dotfiles)</span>
+├── <span class="t-dir">dotfiles/</span>                  <span class="t-note"># Home Manager symlinked configs (~/.config/*)</span>
+│   ├── <span class="t-dir">hypr/</span>                  <span class="t-note"># hyprland.conf, hyprpaper, hypridle, hyprlock</span>
+│   ├── <span class="t-dir">waybar/</span>                <span class="t-note"># Right-side vertical bar config &amp; style.css</span>
+│   └── <span class="t-dir">rofi/  wofi/  wlogout/</span> <span class="t-note"># Launchers &amp; power menu</span>
+├── <span class="t-dir">asus-worker/</span>               <span class="t-note"># Homelab NixOS k3s agent flake &amp; static networking</span>
+├── <span class="t-dir">packages/</span>
+│   └── <span class="t-file">snd-hda-cs8409.nix</span>     <span class="t-note"># MacBook Pro Cirrus CS8409 HDA kernel driver</span>
+├── <span class="t-dir">.config/</span>                   <span class="t-note"># starship.toml, kitty themes, btop, htop, quickshell, gtk</span>
+├── <span class="t-dir">docs/</span>                      <span class="t-note"># This static showcase website (GitHub Pages)</span>
+├── <span class="t-file">CHEATSHEET.md</span>              <span class="t-note"># Rebuild, WireGuard &amp; health-check guide</span>
+└── <span class="t-file">CONFIG-VS-HOME.md</span>          <span class="t-note"># Quick reference: configuration.nix vs home.nix</span></code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer (Orbit Layout) -->
+    <footer class="site-footer">
+      <div class="container-6xl footer-inner">
+        <div class="footer-brand">
+          <svg width="26" height="26" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="footTile" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#a78bfa" />
+                <stop offset="100%" stop-color="#38bdf8" />
+              </linearGradient>
+            </defs>
+            <rect x="8" y="8" width="240" height="240" rx="60" fill="url(#footTile)" />
+            <circle cx="128" cy="128" r="46" fill="#0b0d17" />
+            <path d="M 28 128 A 100 38 0 0 1 228 128" stroke="white" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
+            <path d="M 228 128 A 100 38 0 0 1 28 128" stroke="white" stroke-width="18" stroke-linecap="round" transform="rotate(-24 128 128)" />
+            <circle cx="62" cy="152" r="20" fill="#fbbf24" stroke="#0f172a" stroke-width="7" />
+          </svg>
+          <div>
+            <div class="footer-title">Danny's NixOS &amp; Dotfiles</div>
+            <div class="footer-sub">NixOS 26.05 · Home Manager · Hyprland + GNOME · k3s Homelab</div>
+          </div>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/danny19862025/dotfiles" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
+          <a href="https://github.com/danny19862025/dotfiles/blob/master/README.md" target="_blank" rel="noopener noreferrer">README</a>
+          <a href="https://github.com/danny19862025/dotfiles/blob/master/CHEATSHEET.md" target="_blank" rel="noopener noreferrer">Cheatsheet</a>
+          <a href="https://github.com/danny19862025/dotfiles/blob/master/CONFIG-VS-HOME.md" target="_blank" rel="noopener noreferrer">Config vs Home</a>
+        </div>
       </div>
-    </section>
-
-    <!-- Stack Grid -->
-    <section id="stack" class="section container">
-      <div class="section-head">
-        <h2>Core Stack &amp; Dotfiles</h2>
-        <p>Every tool configured declaratively and tracked in Git.</p>
-      </div>
-      <div class="stack-grid">
-        <div class="card">
-          <div class="card-icon">🐚</div>
-          <h3>Zsh + Starship</h3>
-          <p>Autosuggestions, syntax highlighting, <code>bat</code> as <code>cat</code>, <code>fastfetch</code> greeting, and a powerline Starship prompt with Git, Node, Bun, Rust, Go &amp; PHP modules.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">👻</div>
-          <h3>Ghostty Terminal</h3>
-          <p>Configured via Home Manager with <strong>TokyoNight Moon</strong>, <code>0.85</code> background opacity, and <code>FantasqueSansM Nerd Font Mono</code> at 16pt.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🪟</div>
-          <h3>Hyprland + Waybar</h3>
-          <p>Smooth bezier window animations, 2-pass blur, 15px rounded corners, cyan-to-pink gradient borders, and a vertical right-docked Waybar with MPRIS, audio slider, and SwayNC.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">☁️</div>
-          <h3>rclone Systemd Backups</h3>
-          <p>Automated user timers syncing <code>~/Documents</code> to <code>NixosBackup:NixosBackup</code> on a 5-minute and hourly schedule after <code>network-online.target</code>.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🔊</div>
-          <h3>MacBook CS8409 Driver</h3>
-          <p>Custom Nix kernel module derivation (<code>packages/snd-hda-cs8409.nix</code>) patching and building Cirrus Logic CS8409 speaker audio for 2016/2017 MacBook Pros.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🌐</div>
-          <h3>Flake Inputs</h3>
-          <p>Pinned to <code>nixos-26.05</code> with <code>zen-browser</code> and <code>home-manager</code> following the shared <code>nixpkgs</code> input to prevent duplicate builds.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Config Architecture -->
-    <section id="architecture" class="section container">
-      <div class="section-head">
-        <h2>configuration.nix vs home.nix</h2>
-        <p>One guiding rule: <em>"Does this affect the whole machine, or just my user?"</em></p>
-      </div>
-      <div class="split-grid">
-        <div class="split-card">
-          <div class="split-header">
-            <span class="tag tag-blue">System-wide</span>
-            <h3>/etc/nixos/configuration.nix</h3>
-          </div>
-          <ul class="check-list">
-            <li>Hostname, timezone (<code>Australia/Sydney</code>), locale</li>
-            <li>System services (Tailscale, OpenSSH, PipeWire, CUPS, GDM)</li>
-            <li>Bootloader, kernel modules &amp; firewall rules</li>
-            <li>System packages (<code>environment.systemPackages</code>)</li>
-            <li>rclone systemd timers &amp; weekly Nix garbage collection</li>
-          </ul>
-        </div>
-        <div class="split-card">
-          <div class="split-header">
-            <span class="tag tag-pink">User-level</span>
-            <h3>/etc/nixos/home.nix</h3>
-          </div>
-          <ul class="check-list">
-            <li>Git identity (<code>programs.git</code>)</li>
-            <li>Zsh aliases, autosuggestions &amp; Starship integration</li>
-            <li>Ghostty terminal theme, opacity &amp; Nerd Font</li>
-            <li>Neovim as default editor (<code>vi</code> / <code>vim</code> aliases)</li>
-            <li>Recursive symlinks for <code>hypr</code>, <code>waybar</code>, <code>rofi</code>, <code>wofi</code>, <code>wlogout</code></li>
-          </ul>
-        </div>
-      </div>
-      <p class="callout">
-        <strong>Golden Rule:</strong> Never edit Home Manager–managed files directly inside <code>~/.config/</code> — they are read-only symlinks into the Nix store. Edit under <code>/etc/nixos/</code> and rebuild.
-      </p>
-    </section>
-
-    <!-- Interactive Cheatsheet -->
-    <section id="cheatsheet" class="section container">
-      <div class="section-head">
-        <h2>Cheatsheet &amp; Keybindings</h2>
-        <p>Quick-copy NixOS operations and Hyprland shortcuts.</p>
-      </div>
-
-      <div class="cheat-controls">
-        <div class="filter-group" role="group" aria-label="Filter cheatsheet">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="nixos">NixOS &amp; Flakes</button>
-          <button class="filter-btn" data-filter="health">Health &amp; VPN</button>
-          <button class="filter-btn" data-filter="hypr">Hyprland Keys</button>
-        </div>
-        <input type="search" id="cheat-search" class="search-input" placeholder="Filter commands or keys..." aria-label="Filter commands or keybindings" />
-      </div>
-
-      <div class="cheat-list" id="cheat-list">
-        <!-- NixOS -->
-        <div class="cheat-item" data-cat="nixos">
-          <div class="cheat-info">
-            <span class="cat-dot blue"></span>
-            <div>
-              <strong>Rebuild &amp; switch NixOS + Home Manager</strong>
-              <code>sudo nixos-rebuild switch --flake .#nixos</code>
-            </div>
-          </div>
-          <button class="copy-btn" data-copy="sudo nixos-rebuild switch --flake .#nixos">Copy</button>
-        </div>
-
-        <div class="cheat-item" data-cat="nixos">
-          <div class="cheat-info">
-            <span class="cat-dot blue"></span>
-            <div>
-              <strong>Update all flake inputs</strong>
-              <code>sudo nix flake update</code>
-            </div>
-          </div>
-          <button class="copy-btn" data-copy="sudo nix flake update">Copy</button>
-        </div>
-
-        <div class="cheat-item" data-cat="nixos">
-          <div class="cheat-info">
-            <span class="cat-dot blue"></span>
-            <div>
-              <strong>Update only Zen Browser flake input</strong>
-              <code>sudo nix flake lock --update-input zen-browser</code>
-            </div>
-          </div>
-          <button class="copy-btn" data-copy="sudo nix flake lock --update-input zen-browser">Copy</button>
-        </div>
-
-        <div class="cheat-item" data-cat="nixos">
-          <div class="cheat-info">
-            <span class="cat-dot blue"></span>
-            <div>
-              <strong>Rebuild homelab k3s worker node</strong>
-              <code>sudo nixos-rebuild switch --flake ./asus-worker#asus-worker</code>
-            </div>
-          </div>
-          <button class="copy-btn" data-copy="sudo nixos-rebuild switch --flake ./asus-worker#asus-worker">Copy</button>
-        </div>
-
-        <!-- Health & VPN -->
-        <div class="cheat-item" data-cat="health">
-          <div class="cheat-info">
-            <span class="cat-dot cyan"></span>
-            <div>
-              <strong>Check Home Manager service logs</strong>
-              <code>journalctl -u home-manager-danny.service -n 40 --no-pager</code>
-            </div>
-          </div>
-          <button class="copy-btn" data-copy="journalctl -u home-manager-danny.service -n 40 --no-pager">Copy</button>
-        </div>
-
-        <div class="cheat-item" data-cat="health">
-          <div class="cheat-info">
-            <span class="cat-dot cyan"></span>
-            <div>
-              <strong>Verify WireGuard tunnel &amp; NetworkManager ownership</strong>
-              <code>nmcli connection show &amp;&amp; sudo wg show</code>
-            </div>
-          </div>
-          <button class="copy-btn" data-copy="nmcli connection show && sudo wg show">Copy</button>
-        </div>
-
-        <div class="cheat-item" data-cat="health">
-          <div class="cheat-info">
-            <span class="cat-dot cyan"></span>
-            <div>
-              <strong>Fast-reload Waybar for CSS preview</strong>
-              <code>killall waybar &amp;&amp; waybar &amp;</code>
-            </div>
-          </div>
-          <button class="copy-btn" data-copy="killall waybar && waybar &">Copy</button>
-        </div>
-
-        <!-- Hyprland Keybindings -->
-        <div class="cheat-item" data-cat="hypr">
-          <div class="cheat-info">
-            <span class="cat-dot pink"></span>
-            <div>
-              <strong>Open Ghostty Terminal</strong>
-              <kbd>Super</kbd> + <kbd>Q</kbd>
-            </div>
-          </div>
-          <span class="key-tag">Hyprland</span>
-        </div>
-
-        <div class="cheat-item" data-cat="hypr">
-          <div class="cheat-info">
-            <span class="cat-dot pink"></span>
-            <div>
-              <strong>Close Active Window</strong>
-              <kbd>Super</kbd> + <kbd>C</kbd>
-            </div>
-          </div>
-          <span class="key-tag">Hyprland</span>
-        </div>
-
-        <div class="cheat-item" data-cat="hypr">
-          <div class="cheat-info">
-            <span class="cat-dot pink"></span>
-            <div>
-              <strong>App Launcher (Wofi / Rofi)</strong>
-              <kbd>Super</kbd> + <kbd>R</kbd> <span class="muted">or</span> <kbd>Super</kbd> + <kbd>Space</kbd>
-            </div>
-          </div>
-          <span class="key-tag">Hyprland</span>
-        </div>
-
-        <div class="cheat-item" data-cat="hypr">
-          <div class="cheat-info">
-            <span class="cat-dot pink"></span>
-            <div>
-              <strong>File Manager (Thunar)</strong>
-              <kbd>Super</kbd> + <kbd>E</kbd>
-            </div>
-          </div>
-          <span class="key-tag">Hyprland</span>
-        </div>
-
-        <div class="cheat-item" data-cat="hypr">
-          <div class="cheat-info">
-            <span class="cat-dot pink"></span>
-            <div>
-              <strong>Clipboard History (cliphist + Rofi)</strong>
-              <kbd>Super</kbd> + <kbd>V</kbd>
-            </div>
-          </div>
-          <span class="key-tag">Hyprland</span>
-        </div>
-
-        <div class="cheat-item" data-cat="hypr">
-          <div class="cheat-info">
-            <span class="cat-dot pink"></span>
-            <div>
-              <strong>Region Screenshot (grim + slurp)</strong>
-              <kbd>Print</kbd>
-            </div>
-          </div>
-          <span class="key-tag">Hyprland</span>
-        </div>
-
-        <div class="cheat-item" data-cat="hypr">
-          <div class="cheat-info">
-            <span class="cat-dot pink"></span>
-            <div>
-              <strong>Move Focus / Move Active Window</strong>
-              <kbd>Super</kbd> + <kbd>Arrows</kbd> <span class="muted">/</span> <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Arrows</kbd>
-            </div>
-          </div>
-          <span class="key-tag">Hyprland</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Repo Structure -->
-    <section id="structure" class="section container">
-      <div class="section-head">
-        <h2>Repository Layout</h2>
-        <p>Clean separation of NixOS flakes, Home Manager dotfiles, homelab nodes, and docs.</p>
-      </div>
-      <div class="tree-card">
-        <pre><code>danny19862025/dotfiles
-├── flake.nix                  <span class="tree-note"># Main NixOS 26.05 + Home Manager + Zen Browser flake</span>
-├── configuration.nix          <span class="tree-note"># Workstation system config (GNOME, Hyprland, Tailscale, rclone)</span>
-├── home.nix                   <span class="tree-note"># User config (zsh, starship, ghostty, neovim, git, dotfiles)</span>
-├── dotfiles/                  <span class="tree-note"># Home Manager symlinked configs</span>
-│   ├── hypr/                  <span class="tree-note"># hyprland.conf, hyprpaper, hypridle, hyprlock</span>
-│   ├── waybar/                <span class="tree-note"># Right-side vertical bar config &amp; style.css</span>
-│   ├── rofi/  wofi/  wlogout/ <span class="tree-note"># Launchers &amp; power menu</span>
-├── asus-worker/               <span class="tree-note"># Homelab NixOS k3s agent flake &amp; static networking</span>
-├── packages/
-│   └── snd-hda-cs8409.nix     <span class="tree-note"># MacBook Pro Cirrus CS8409 HDA kernel driver</span>
-├── .config/                   <span class="tree-note"># starship.toml, kitty themes, btop, htop, quickshell, gtk</span>
-├── docs/                      <span class="tree-note"># This static website (GitHub Pages)</span>
-├── CHEATSHEET.md              <span class="tree-note"># Rebuild, WireGuard &amp; health-check guide</span>
-└── CONFIG-VS-HOME.md          <span class="tree-note"># Quick reference: configuration.nix vs home.nix</span></code></pre>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>Built for <a href="https://github.com/danny19862025/dotfiles" target="_blank" rel="noopener noreferrer">danny19862025/dotfiles</a> · Styled in TokyoNight Moon</p>
-      <div class="footer-links">
-        <a href="https://github.com/danny19862025/dotfiles/blob/master/README.md" target="_blank" rel="noopener noreferrer">README</a>
-        <a href="https://github.com/danny19862025/dotfiles/blob/master/CHEATSHEET.md" target="_blank" rel="noopener noreferrer">Cheatsheet</a>
-        <a href="https://github.com/danny19862025/dotfiles/blob/master/CONFIG-VS-HOME.md" target="_blank" rel="noopener noreferrer">Config vs Home</a>
-      </div>
-    </div>
-  </footer>
+    </footer>
+  </div>
 
   <script src="script.js"></script>
 </body>
